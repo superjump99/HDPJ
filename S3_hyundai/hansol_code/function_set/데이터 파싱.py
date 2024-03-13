@@ -79,17 +79,17 @@ def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
 if __name__ == '__main__':
 
     high_path = 'C:/Users/pc/SS-233/hyundai_code'
-    given_path = 'S3_hyundai/0.given_data'
-    working_path = 'S3_hyundai/1.working'
+    # given_path = 'S3_hyundai/0.given_data'
+    step2_path = 'S3_hyundai/2.parsing_done'
     space = "03_Urban"
     dataset = "HKMC-N2202209-240220"
 
-    for sequence_set in os.listdir(f"{high_path}/{working_path}/{space}/{dataset}/"):
-        annotation_folder = f"{high_path}/{working_path}/{space}/{sequence_set}/annotations/"
+    for sequence_set in os.listdir(f"{high_path}/{step2_path}/{space}/{dataset}/"):
+        annotation_folder = f"{high_path}/{step2_path}/{space}/{sequence_set}/annotations/"
 
         if not os.path.exists(annotation_folder):
 
-            pointclouds_folder = f"{high_path}/{working_path}/{space}/{dataset}/{sequence_set}/pointclouds/"
+            pointclouds_folder = f"{high_path}/{step2_path}/{space}/{dataset}/{sequence_set}/pointclouds/"
 
             for pcdbin_file in tqdm(os.listdir(pointclouds_folder)):
                 input_file_path = os.path.join(pointclouds_folder, pcdbin_file)
