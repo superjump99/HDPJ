@@ -48,15 +48,15 @@ if __name__ == '__main__':
 
     high_path = 'C:/Users/pc/SS-233/hyundai_code'
     given_path = 'S3_hyundai/0.given_data'
-    working_path = 'S3_hyundai/1.working'
+    step1_path = 'S3_hyundai/1.div&remove'
     space = "03_Urban"
     dataset = "HKMC-N2202209-240220"
 
-    for i, sequence_set in enumerate(os.listdir(f"{high_path}/{working_path}/{space}/{dataset}")):
-        pcdbin_folder = f"{high_path}/{working_path}/{space}/{dataset}/{sequence_set}/pointclouds"
-        imageFC_folder = f"{high_path}/{working_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT"
-        imageFR_folder = f"{high_path}/{working_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_RIGHT"
-        imageFL_folder = f"{high_path}/{working_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_LEFT"
+    for i, sequence_set in enumerate(os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}")):
+        pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds"
+        imageFC_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT"
+        imageFR_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_RIGHT"
+        imageFL_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_LEFT"
         find_files_with_remainder_zero(pcdbin_folder)
         # rename_files(pcdbin_folder)
 
@@ -69,4 +69,3 @@ if __name__ == '__main__':
         find_files_with_remainder_zero(imageFL_folder)
         rename_files(imageFL_folder)
 
-        break
