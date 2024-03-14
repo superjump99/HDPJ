@@ -65,7 +65,7 @@ def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
             "DATA ascii"]
 
     #  TODO 0:x_veh, 1:y_veh, 2:z_veh, 14:intensity
-    table = pre_processing_done_df.iloc[:, [0, 1, 2, 14]]
+    table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
     # print(table)
 
     with open(output_file_path, 'w+') as output_file:
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     dataset = "HKMC-N2202209-240220"
 
     for sequence_set in os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}/"):
-        annotation_folder = f"{high_path}/{step2_path}/{space}/{dataset}/{sequence_set}/annotations/"
+        annotation_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/annotations/"
 
         if not os.path.exists(annotation_folder):
             pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/PCDBIN"
