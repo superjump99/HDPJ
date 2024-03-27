@@ -17,7 +17,7 @@ if __name__ == '__main__':
                 # os.makedirs(annotation_folder)
 
                 source_folder = f"{high_path}/{given_path}/{space}/{dataset}/LDR_Raw_PCD/LDR_Raw_PCD-{sequence_set[12:]}/"
-                target_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set[12:]}/PCDBIN/"
+                target_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set[12:]}/pointclouds/"
                 shutil.copytree(source_folder, target_folder)
 
                 source_folder = f"{high_path}/{given_path}/{space}/{dataset}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFC"
@@ -32,6 +32,5 @@ if __name__ == '__main__':
                 target_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set[12:]}/images/CAM_FRONT_RIGHT"
                 shutil.copytree(source_folder, target_folder)
                 print(f"{i+1} [원천 데이터 분리 완료]", sequence_set[12:])
-                break
         except FileExistsError:
             print(f"{i+1} [폴더 이미 존재]", sequence_set[12:])
