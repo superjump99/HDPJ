@@ -71,6 +71,3 @@ def frames(object_list,frame_metadata):
                 "OBJECT_LIST": object_list
             }
     return FRAME_list
-
-if __name__ == "__main__":
-    pass
