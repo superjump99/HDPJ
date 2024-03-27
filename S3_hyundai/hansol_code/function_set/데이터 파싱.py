@@ -65,7 +65,7 @@ def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
             "DATA ascii"]
 
     #  TODO 0:x_veh, 1:y_veh, 2:z_veh, 14:intensity
-    table = pre_processing_done_df.iloc[:, [0, 1, 2, 14]]
+    table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
     if not os.path.exists(pointclouds_folder):
         os.makedirs(pointclouds_folder)
     with open(output_file_path, 'w+') as output_file:
@@ -98,9 +98,7 @@ if __name__ == '__main__':
                 input_file = os.path.join(pcdbin_folder, pcdbin_file)
                 output_file = os.path.join(pointclouds_folder, os.path.splitext(pcdbin_file)[0] + ".pcd")
 
-
                 pre_processing_done_df = pcdbin_parser(input_file)
-
                 pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file)
 
             os.makedirs(annotation_folder)
