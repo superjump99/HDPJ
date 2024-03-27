@@ -65,8 +65,9 @@ def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
             "DATA ascii"]
 
     #  TODO 0:x_veh, 1:y_veh, 2:z_veh, 14:intensity
-    table = pre_processing_done_df.iloc[:, [0, 1, 2, 14]]
+    table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
     # print(table)
+
     with open(output_file_path, 'w+') as output_file:
         output_file.write('\n'.join(header_lines) + '\n')
 
@@ -77,7 +78,6 @@ def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
         with open(output_file_path, 'a') as output_file:
             output_file.write('\n'.join(write_line) + '\n')
 
-
 if __name__ == '__main__':
 
     high_path = 'C:/Users/pc/SS-233/hyundai_code'
@@ -87,14 +87,15 @@ if __name__ == '__main__':
     dataset = "HKMC-N2202209-240220"
 
     for sequence_set in os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}/"):
-        annotation_folder = f"{high_path}/{step2_path}/{space}/{sequence_set}/annotations/"
+        annotation_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/annotations/"
 
         if not os.path.exists(annotation_folder):
-
+            pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/PCDBIN"
             pointclouds_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds/"
-
-            for pcdbin_file in tqdm(os.listdir(pointclouds_folder)):
-                input_file_path = os.path.join(pointclouds_folder, pcdbin_file)
+            if not os.path.exists(pointclouds_folder):
+                os.makedirs(pointclouds_folder)
+            for pcdbin_file in tqdm(os.listdir(pcdbin_folder)):
+                input_file_path = os.path.join(pcdbin_folder, pcdbin_file)
                 output_file_path = os.path.join(pointclouds_folder, os.path.splitext(pcdbin_file)[0] + ".pcd")
 
 
@@ -104,8 +105,17 @@ if __name__ == '__main__':
 
             os.makedirs(annotation_folder)
 
+            for i, old_name in enumerate(pointclouds_folder):
+                if old_name.endswith('.pcd'):
+                    new_name = f"{i:06d}.pcd"
+
+                    # 입력 폴더의 파일 경로와 출력 폴더의 파일 경로 생성
+                    old_path = os.path.join(pointclouds_folder, old_name)
+                    new_path = os.path.join(pointclouds_folder, new_name)
+                    # 파일 이름 변경
+                    os.rename(old_path, new_path)
             print(f" Success [작업 가능 폴더 생성 완료]", sequence_set)
-            break
+
         else:
             print(f"Error [이미 폴더 생성 완료]", sequence_set)
     if not os.path.exists(f"{high_path}/{step2_path}/"):
