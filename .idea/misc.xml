@@ -3,5 +3,9 @@
   <component name="Black">
     <option name="sdkName" value="base" />
   </component>
+<<<<<<< Updated upstream
   <component name="ProjectRootManager" version="2" project-jdk-name="hyundai" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="C:\Users\pc\anaconda3" project-jdk-type="Python SDK" />
+>>>>>>> Stashed changes
 </project>
