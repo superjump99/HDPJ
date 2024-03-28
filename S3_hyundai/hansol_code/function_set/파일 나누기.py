@@ -13,8 +13,6 @@ if __name__ == '__main__':
     for i, sequence_set in enumerate(os.listdir(f"{high_path}/{given_path}/{space}/{dataset}/LDR_Raw_PCD/")):
         try:
             if not os.path.exists(f"{high_path}/{given_path}/{space}/{sequence_set[12:]}"):
-                # annotation_folder = f"{high_path}/{step2_path}/{sequence_set[12:]}/annotations/"
-                # os.makedirs(annotation_folder)
 
                 source_folder = f"{high_path}/{given_path}/{space}/{dataset}/LDR_Raw_PCD/LDR_Raw_PCD-{sequence_set[12:]}/"
                 target_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set[12:]}/pcdbin/"
