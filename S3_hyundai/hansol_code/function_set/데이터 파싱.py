@@ -51,7 +51,7 @@ def pre_process(df):
     df.reset_index(drop=True, inplace=True)
     return df
 
-def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
+def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
     header_lines = [
             "VERSION .7",
             "FIELDS x y z intensity",
@@ -65,8 +65,9 @@ def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
             "DATA ascii"]
 
     #  TODO 0:x_veh, 1:y_veh, 2:z_veh, 14:intensity
-    table = pre_processing_done_df.iloc[:, [0, 1, 2, 14]]
-    # print(table)
+    table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
+    if not os.path.exists(pointclouds_folder):
+        os.makedirs(pointclouds_folder)
     with open(output_file_path, 'w+') as output_file:
         output_file.write('\n'.join(header_lines) + '\n')
 
@@ -87,28 +88,26 @@ if __name__ == '__main__':
     dataset = "HKMC-N2202209-240220"
 
     for sequence_set in os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}/"):
-        annotation_folder = f"{high_path}/{step2_path}/{space}/{sequence_set}/annotations/"
+        annotation_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/annotations/"
 
         if not os.path.exists(annotation_folder):
-
+            pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin/"
             pointclouds_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds/"
 
-            for pcdbin_file in tqdm(os.listdir(pointclouds_folder)):
-                input_file_path = os.path.join(pointclouds_folder, pcdbin_file)
-                output_file_path = os.path.join(pointclouds_folder, os.path.splitext(pcdbin_file)[0] + ".pcd")
+            for pcdbin_file in tqdm(os.listdir(pcdbin_folder)):
+                input_file = os.path.join(pcdbin_folder, pcdbin_file)
+                output_file = os.path.join(pointclouds_folder, os.path.splitext(pcdbin_file)[0] + ".pcd")
 
-
-                pre_processing_done_df = pcdbin_parser(input_file_path)
-
-                pcdbin_to_pcd(pre_processing_done_df, output_file_path)
+                pre_processing_done_df = pcdbin_parser(input_file)
+                pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file)
 
             os.makedirs(annotation_folder)
 
             print(f" Success [작업 가능 폴더 생성 완료]", sequence_set)
-            break
+
         else:
             print(f"Error [이미 폴더 생성 완료]", sequence_set)
-    if not os.path.exists(f"{high_path}/{step2_path}/"):
-        os.makedirs(f"{high_path}/{step2_path}/")
+    # if not os.path.exists(f"{high_path}/{step2_path}/"):
+    #     os.makedirs(f"{high_path}/{step2_path}/")
 
-    shutil.move(f"{high_path}/{step1_path}/{space}/",f"{high_path}/{step2_path}/{space}/")
+    # shutil.move(f"{high_path}/{step1_path}/{space}/",f"{high_path}/{step2_path}/{space}/")
