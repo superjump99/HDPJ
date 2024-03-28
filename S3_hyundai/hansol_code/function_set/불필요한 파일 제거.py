@@ -49,8 +49,8 @@ if __name__ == '__main__':
     high_path = 'C:/Users/pc/SS-233/hyundai_code'
     given_path = 'S3_hyundai/0.given_data'
     step1_path = 'S3_hyundai/1.div&remove'
-    space = "03_Urban"
-    dataset = "HKMC-N2202209-240220"
+    space = "00_sample"
+    dataset = "HKMC-N2202209-240111"
 
     for i, sequence_set in enumerate(os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}")):
         pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin"

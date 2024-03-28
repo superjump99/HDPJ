@@ -5,10 +5,10 @@ import shutil
 if __name__ == '__main__':
 
     high_path = 'C:/Users/pc/SS-233/hyundai_code'
-    given_path = 'S3_hyundai/0.given_data'
+    given_path = 'S3_hyundai/0.raw_data'
     step1_path = 'S3_hyundai/1.div&remove'
-    space = "03_Urban"
-    dataset = "HKMC-N2202209-240220"
+    space = "01_Hightway"
+    dataset = "HKMC-N2202209-240208"
 
     for i, sequence_set in enumerate(os.listdir(f"{high_path}/{given_path}/{space}/{dataset}/LDR_Raw_PCD/")):
         try:
