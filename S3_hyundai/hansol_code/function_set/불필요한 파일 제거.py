@@ -53,7 +53,7 @@ if __name__ == '__main__':
     dataset = "HKMC-N2202209-240220"
 
     for i, sequence_set in enumerate(os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}")):
-        pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds"
+        pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin"
         imageFC_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT"
         imageFR_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_RIGHT"
         imageFL_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_LEFT"
