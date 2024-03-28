@@ -1,13 +1,13 @@
 import os
+import shutil
 
-
-def rename_files(input_folder, output_folder):
+def rename_files(folder):
     # 입력 폴더에서 파일 목록 가져오기
-    file_list = os.listdir(input_folder)
+    file_list = os.listdir(folder)
 
     # 출력 폴더가 없으면 생성
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
 
     # 파일 이름 변경 및 저장
     for i, old_name in enumerate(file_list):
@@ -16,21 +16,19 @@ def rename_files(input_folder, output_folder):
             new_name = f"{i:06d}.pcd"
 
             # 입력 폴더의 파일 경로와 출력 폴더의 파일 경로 생성
-            old_path = os.path.join(input_folder, old_name)
-            new_path = os.path.join(output_folder, new_name)
+            old_path = os.path.join(folder, old_name)
+            new_path = os.path.join(folder, new_name)
             # 파일 이름 변경
             os.rename(old_path, new_path)
 
         elif old_name.endswith('jpg'):
-            new_name = f"{i+1:06d}.jpg"
+            new_name = f"{i + 1:06d}.jpg"
 
             # 입력 폴더의 파일 경로와 출력 폴더의 파일 경로 생성
-            old_path = os.path.join(input_folder, old_name)
-            new_path = os.path.join(output_folder, new_name)
+            old_path = os.path.join(folder, old_name)
+            new_path = os.path.join(folder, new_name)
             # 파일 이름 변경
             os.rename(old_path, new_path)
-        # print(f"Renamed: {old_name} -> {new_name}")
-
 
 def find_files_with_remainder_zero(folder_path):
 
@@ -48,25 +46,21 @@ def find_files_with_remainder_zero(folder_path):
 
 # 사용 예시
 if __name__ == '__main__':
-    path = "C:/Users/pc/SS-233/hyundai_code"
-    file_name = "HKMC-N2202209-240220110344-RFFR_LDL-0.0.0.1.0-RFFR_LDR-1"
-    input_folder = f"{path}/S3_hyundai/1.working/{file_name}/pointclouds"
-    output_folder = f"{path}/S3_hyundai/1.working/{file_name}/pointclouds"
+    high_path = 'C:/Users/pc/SS-233/hyundai_code'
+    given_path = 'S3_hyundai/0.given_data'
+    step1_path = 'S3_hyundai/1.div&remove'
+    space = "03_Urban"
+    dataset = "HKMC-N2202209-240220"
 
-    find_files_with_remainder_zero(input_folder)
-    rename_files(input_folder, output_folder)
+    for i, sequence_set in enumerate(os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}")):
 
-    imagef_input_folder = f"{path}/S3_hyundai/1.working/{file_name}/images/CAM_FRONT"
-    imagefl_input_folder = f"{path}/S3_hyundai/1.working/{file_name}/images/CAM_FRONT_LEFT"
-    imagefr_input_folder = f"{path}/S3_hyundai/1.working/{file_name}/images/CAM_FRONT_RIGHT"
+        pointclouds_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds"
+        pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin"
 
-    imagef_output_folder = f"{path}/S3_hyundai/1.working/{file_name}/images/CAM_FRONT"
-    imagefl_output_folder = f"{path}/S3_hyundai/1.working/{file_name}/images/CAM_FRONT_LEFT"
-    imagefr_output_folder = f"{path}/S3_hyundai/1.working/{file_name}/images/CAM_FRONT_RIGHT"
+        rename_files(pointclouds_folder)
 
-    find_files_with_remainder_zero(imagef_input_folder)
-    find_files_with_remainder_zero(imagefl_input_folder)
-    find_files_with_remainder_zero(imagefr_input_folder)
-    rename_files(imagef_input_folder, imagef_output_folder)
-    rename_files(imagefl_input_folder, imagefl_output_folder)
-    rename_files(imagefr_input_folder, imagefr_output_folder)
+        if os.path.exists(pcdbin_folder):
+            shutil.rmtree(pcdbin_folder)
+
+        shutil.make_archive(f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}",
+                            'zip', root_dir=f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}")
