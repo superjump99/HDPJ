@@ -38,27 +38,28 @@ def change_frame_metadata(num,pcdnum,start_time):
                 }
     return frame_metadata
 
-def change_object_list(input_json):
+def change_object_list(input_df):
     object_list = []
     try:
-        for i in range(len(input_json['labels'])):
-            label = {
-                "CLASS": input_json["labels"][i]['category'],
-                "OCCLUSION": str(input_json["labels"][i]['occlusion']),
-                # TODO Fix TRUNCATION value
-                "TRUNCATION": 0 , #1 / (input_json["labels"][i]["box3d"]["dimension"]["width"]*input_json["labels"][i]["box3d"]["dimension"]["length"]),
-                "LOCATION": [
-                    round(input_json["labels"][i]["box3d"]["location"]["x"], 2),
-                    round(input_json["labels"][i]["box3d"]["location"]["y"], 2),
-                    round(input_json["labels"][i]["box3d"]["location"]["z"], 2)
-                ],
-                "DIMENSION": [
-                    round(input_json["labels"][i]["box3d"]["dimension"]["length"], 2),
-                    round(input_json["labels"][i]["box3d"]["dimension"]["width"], 2),
-                    round(input_json["labels"][i]["box3d"]["dimension"]["height"], 2)
-                ],
-                "HEADING": round(input_json["labels"][i]["box3d"]["orientation"]["rotationYaw"], 4),
-            }
+        for i in range(len(input_df)):
+            frame = input_df.iloc[i].to_dict()
+            label = [{
+                    "CLASS": str(frame['category']),
+                    "OCCLUSION": str(frame['OCCLUSION']),
+                    "TRUNCATION": round(frame['truncation'], 2),
+                    "LOCATION": [
+                        round(frame["x"], 2),
+                        round(frame["y"], 2),
+                        round(frame["z"], 2)
+                    ],
+                    "DIMENSION": [
+                        round(frame["length"], 2),
+                        round(frame["width"], 2),
+                        round(frame["height"], 2)
+                    ],
+                    "HEADING": round(frame["rotationYaw"], 4),
+                }]
+
             object_list.append(label)
     except KeyError:
         pass

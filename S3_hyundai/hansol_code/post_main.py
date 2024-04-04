@@ -1,9 +1,10 @@
+import numpy as np
 from function_set import GT_Box_post_processing as GTB
 from function_set import GT_Property_post_processing as GTP
+from function_set import TRUNCATION
 import json
 import pandas as pd
 import os
-
 
 if __name__ == '__main__':
     high_path = 'C:/Users/pc/SS-233/hyundai_code'
@@ -66,7 +67,9 @@ if __name__ == '__main__':
             print(f" '{folder_name}--LDR_GT_Property' 폴더는 이미 생성 되었습니다. ")
         # TODO BOX
         # 생성된 폴더 확인 및 생성
-        if not os.path.exists(f"{cuboid_test}/LDR_GT_BOX"):
+        if not os.path.exists(f"{cuboid_test}/LDR_GT_BO1"):
+            field = np.array([(-1, 0), (20, 50), (120, 50), (120, -50), (20, -50), (-1, 0)])
+
             # 입력 폴더 내의 모든 JSON 파일 목록 가져오기
             json_files = [f for f in os.listdir(f"{cuboid_test}/annotations") if f.endswith('.json')]
 
@@ -74,19 +77,20 @@ if __name__ == '__main__':
             for idx,json_file in enumerate(json_files):
 
                 pcdfilenum = int(json_file[:6])
-
-                # 각 JSON 파일을 읽어오기
-                with open(os.path.join(f"{cuboid_test}/annotations", json_file), 'r') as f:
-                    data = json.load(f)
+                df = TRUNCATION.load_json_annotations(os.path.join(f"{cuboid_test}/annotations", json_file))
+                truncation_df = TRUNCATION.truncation(field, df)
+                # print(truncation_df)
                 # 후처리 함수
                 frame_metadata = GTB.change_frame_metadata(idx+1, pcdfilenum, log_start_time)
-                object_list = GTB.change_object_list(data)
+                # print(frame_metadata)
+                object_list = GTB.change_object_list(truncation_df)
+                # print(object_list)
                 frame = GTB.frames(object_list, frame_metadata)
                 output_json['FRAME_LIST'].append(frame)
 
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
-            output_file = os.path.join(f"{cuboid_test}/LDR_GT_BOX", box_filename)
-            os.makedirs(f"{cuboid_test}/LDR_GT_BOX")
+            output_file = os.path.join(f"{cuboid_test}/LDR_GT_BOX123", box_filename)
+            os.makedirs(f"{cuboid_test}/LDR_GT_BOX123")
             with open(output_file, 'w') as f:
                 json.dump(output_json, f, indent=2)
             print(f" '{folder_name}--LDR_GT_BOX' 폴더가 생성 되었습니다. ")
