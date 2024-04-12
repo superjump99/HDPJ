@@ -15,13 +15,14 @@ if __name__ == '__main__':
 
     os.chdir('../../../')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
-
-    for i, sequence_set in enumerate(os.listdir(f"{base_path}/{step_path}/{given_data_path}/{space}/{dataset}/LDR_Raw_PCD/")):
+    print(base_path)
+    # exit()
+    for i, sequence_set in enumerate(os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/LDR_Raw_PCD/")):
         print(sequence_set)
         try:
-            if not os.path.exists(f"{base_path}/{step_path}/{given_data_path}/{space}/{dataset}/{sequence_set[12:]}"):
-                given_path = f"{base_path}/{step_path}/{given_data_path}/{space}/{dataset}"
-                div_path = f"{base_path}/{step_path}/{div_remove_path}/{space}/{dataset}"
+            if not os.path.exists(f"{base_path}/{given_data_path}/{space}/{dataset}/{sequence_set[12:]}"):
+                given_path = f"{base_path}/{given_data_path}/{space}/{dataset}"
+                div_path = f"{base_path}/{div_remove_path}/{space}/{dataset}"
 
                 source_folder = f"{given_path}/LDR_Raw_PCD/LDR_Raw_PCD-{sequence_set[12:]}/"
                 target_folder = f"{div_path}/{sequence_set[12:]}/pcdbin/"
