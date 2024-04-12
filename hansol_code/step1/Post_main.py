@@ -21,6 +21,9 @@ if __name__ == '__main__':
     os.chdir('../../')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
 
+    today = (str(datetime.today().year)[2:] + str(datetime.today().month).zfill(2) +
+             str(datetime.today().day).zfill(2))
+
     for folder_name in os.listdir(f"{base_path}/{working_done_path}/{space}/{dataset}"):
 
         result = folder_name.split('-')
@@ -33,30 +36,31 @@ if __name__ == '__main__':
 
         # TODO Property
         # 생성된 폴더 확인 및 생성
-        if not os.path.exists(f"{base_path}/{out_path}/{space}/{dataset}/LDR_GT_Property"):
+        if not os.path.exists(f"{base_path}/{out_path}/{space}/{dataset}/{today}-LDR_GT_Property"):
 
             # 후처리 할 데이터 불러오기
             data = pd.read_excel(f"{base_path}/{working_done_path}/{space}/{dataset}/property_data.xlsx")
             data.drop([0, 1], axis=0, inplace=True)
             data.reset_index(drop=True, inplace=True)
-            # print(data.loc[0])
+
             # csv 파일에서 데이터
             row = data.loc[0]
             seq_data = PROPERTY.sequence_metadata(row, version)
             sence_data = PROPERTY.sence_curation(row)
             output_json = PROPERTY.convert_to_new_format(seq_data, sence_data)
+
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
-            os.makedirs(f"{base_path}/{out_path}/{space}/{dataset}/LDR_GT_Property")
-            output_file = os.path.join(f"{base_path}/{out_path}/{space}/{dataset}/LDR_GT_Property", property_filename)
+            output_file = os.path.join(f"{base_path}/{out_path}/{space}/{dataset}/LDR_GT_Property",
+                                       property_filename)
+            os.makedirs(f"{base_path}/{out_path}/{space}/{dataset}/{today}-LDR_GT_Property")
             with open(output_file, 'w') as f:
                 json.dump(output_json, f, indent=2)
             print(f" '{folder_name}--LDR_GT_Property' 폴더가 생성 되었습니다. ")
         else:
             print(f" '{folder_name}--LDR_GT_Property' 폴더는 이미 생성 되었습니다. ")
+
         # TODO BOX
         # 생성된 폴더 확인 및 생성
-        today = (str(datetime.today().year)[2:] + str(datetime.today().month).zfill(2) +
-                 str(datetime.today().day).zfill(2))
         if not os.path.exists(f"{base_path}/{out_path}/{space}/{dataset}/{today}-LDR_GT_BOX"):
             field = np.array([(-1, 0), (20, 50), (120, 50), (120, -50), (20, -50), (-1, 0)])
 
@@ -66,7 +70,6 @@ if __name__ == '__main__':
 
             output_json = {"FRAME_LIST": []}
             for idx, json_file in enumerate(json_files):
-
                 pcdfilenum = int(json_file[:6])
                 df = TRUNCATION.load_json_annotations(
                     os.path.join(f"{base_path}/{working_done_path}/{space}/{dataset}/annotations", json_file))
@@ -79,7 +82,7 @@ if __name__ == '__main__':
                 output_json['FRAME_LIST'].append(frame)
 
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
-            output_file = os.path.join(f"{base_path}/{out_path}/{space}/{dataset}/{today}-LDR_GT_BOX", box_filename)
+            output_file = os.path.join(f"{base_path}/{out_path}/{space}/{dataset}/LDR_GT_BOX", box_filename)
             os.makedirs(f"{base_path}/{out_path}/{space}/{dataset}/{today}-LDR_GT_BOX")
             with open(output_file, 'w') as f:
                 json.dump(output_json, f, indent=2)
