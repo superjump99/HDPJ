@@ -15,29 +15,29 @@ if __name__ == '__main__':
 
     os.chdir('../../../')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
-    print(base_path)
+    # print(base_path)
     # exit()
     for i, sequence_set in enumerate(os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/LDR_Raw_PCD/")):
-        print(sequence_set)
+        # print(sequence_set)
         try:
             if not os.path.exists(f"{base_path}/{given_data_path}/{space}/{dataset}/{sequence_set[12:]}"):
-                given_path = f"{base_path}/{given_data_path}/{space}/{dataset}"
-                div_path = f"{base_path}/{div_remove_path}/{space}/{dataset}"
+                given_folder = f"{base_path}/{given_data_path}/{space}/{dataset}"
+                div_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}"
 
-                source_folder = f"{given_path}/LDR_Raw_PCD/LDR_Raw_PCD-{sequence_set[12:]}/"
-                target_folder = f"{div_path}/{sequence_set[12:]}/pcdbin/"
+                source_folder = f"{given_folder}/LDR_Raw_PCD/LDR_Raw_PCD-{sequence_set[12:]}/"
+                target_folder = f"{div_folder}/{sequence_set[12:]}/pcdbin/"
                 shutil.copytree(source_folder, target_folder)
 
-                source_folder = f"{given_path}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFC"
-                target_folder = f"{div_path}/{sequence_set[12:]}/images/CAM_FRONT"
+                source_folder = f"{given_folder}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFC"
+                target_folder = f"{div_folder}/{sequence_set[12:]}/images/CAM_FRONT"
                 shutil.copytree(source_folder, target_folder)
 
-                source_folder = f"{given_path}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFL"
-                target_folder = f"{div_path}/{sequence_set[12:]}/images/CAM_FRONT_LEFT"
+                source_folder = f"{given_folder}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFL"
+                target_folder = f"{div_folder}/{sequence_set[12:]}/images/CAM_FRONT_LEFT"
                 shutil.copytree(source_folder, target_folder)
 
-                source_folder = f"{given_path}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFR"
-                target_folder = f"{div_path}/{dataset}/images/CAM_FRONT_RIGHT"
+                source_folder = f"{given_folder}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFR"
+                target_folder = f"{div_folder}/{dataset}/images/CAM_FRONT_RIGHT"
                 shutil.copytree(source_folder, target_folder)
                 print(f"{i+1} [원천 데이터 분리 완료]", sequence_set[12:])
         except FileExistsError:
