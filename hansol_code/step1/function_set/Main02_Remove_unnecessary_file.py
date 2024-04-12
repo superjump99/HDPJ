@@ -46,18 +46,26 @@ def rename_files(folder):
 
 if __name__ == '__main__':
 
-    high_path = '/'
-    given_path = 'S3_hyundai/0.given_data'
-    step1_path = 'S3_hyundai/1.div&remove'
-    space = "00_sample"
-    dataset = "HKMC-N2202209-240111"
+    s3_path = 'S3_hyundai'
+    step_path = 'step1'
 
-    for i, sequence_set in enumerate(os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}")):
-        pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin"
-        imageFC_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT"
-        imageFR_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_RIGHT"
-        imageFL_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_LEFT"
-        find_files_with_remainder_zero(pcdbin_folder)
+    given_data_path = '0.given_data'
+    div_remove_path = '1.div&remove'
+
+    space = "01_Hightway"
+    dataset = "HKMC-N2202209-240208"
+
+    os.chdir('../../../')
+    base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
+
+    for i, sequence_set in enumerate(os.listdir(f"{base_path}/{div_remove_path}/{space}/{dataset}")):
+
+        div_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}"
+        PCDBIN_folder = f"{div_folder}/pcd bin"
+        imageFC_folder = f"{div_folder}/images/CAM_FRONT"
+        imageFR_folder = f"{div_folder}/images/CAM_FRONT_RIGHT"
+        imageFL_folder = f"{div_folder}/images/CAM_FRONT_LEFT"
+        find_files_with_remainder_zero(PCDBIN_folder)
         # rename_files(pcdbin_folder)
 
         find_files_with_remainder_zero(imageFC_folder)
