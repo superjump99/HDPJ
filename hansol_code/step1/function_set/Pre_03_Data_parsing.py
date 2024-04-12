@@ -1,9 +1,9 @@
 import os
 import shutil
-
+import pandas as pd
 from tqdm import tqdm
 import struct
-import pandas as pd
+import Pre_04_rename_files as rename_files
 
 # TODO 데이터 파싱
 def pcdbin_parser(input_file_path):
@@ -17,21 +17,21 @@ def pcdbin_parser(input_file_path):
 
     df_list = []
     output_list = []
-    with open(input_file_path, 'rb') as input_file:
+    with open(input_file_path, 'rb') as INPUT_FILE:
         while True:
             if len(output_list) < 21:
                 if len(output_list) < 16:
-                    line = input_file.read(4)
+                    line = INPUT_FILE.read(4)
                     if not line:
                         break
                     output_list.append(struct.unpack("f", line)[0])
 
                 elif len(output_list) < 18:
-                    line = input_file.read(2)
+                    line = INPUT_FILE.read(2)
                     output_list.append(struct.unpack("H", line)[0])
 
                 else:
-                    line = input_file.read(4)
+                    line = INPUT_FILE.read(4)
                     output_list.append(struct.unpack_from("L", line)[0])
             else:
                 df_list.append(output_list)
@@ -39,6 +39,8 @@ def pcdbin_parser(input_file_path):
         parsing_df = pd.DataFrame(df_list, columns=field)
         pre_processing_done_df = pre_process(parsing_df)
         return pre_processing_done_df
+
+
 # TODO Preprocessing
 def pre_process(df):
     # ROI 관련 범위 종방향 0 < x < 120m, 횡방향 -50 < y < 50m
@@ -51,18 +53,19 @@ def pre_process(df):
     df.reset_index(drop=True, inplace=True)
     return df
 
+
 def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
     header_lines = [
-            "VERSION .7",
-            "FIELDS x y z intensity",
-            "SIZE 4 4 4 4",
-            "TYPE F F F F",
-            "COUNT 1 1 1 1",
-            f"WIDTH {len(pre_processing_done_df)}",
-            "HEIGHT 1",
-            "VIEWPOINT 0 0 0 1 0 0 0",
-            f"POINTS {len(pre_processing_done_df)}",
-            "DATA ascii"]
+        "VERSION .7",
+        "FIELDS x y z intensity",
+        "SIZE 4 4 4 4",
+        "TYPE F F F F",
+        "COUNT 1 1 1 1",
+        f"WIDTH {len(pre_processing_done_df)}",
+        "HEIGHT 1",
+        "VIEWPOINT 0 0 0 1 0 0 0",
+        f"POINTS {len(pre_processing_done_df)}",
+        "DATA ascii"]
 
     #  TODO 0:x_veh, 1:y_veh, 2:z_veh, 14:intensity
     table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
@@ -81,22 +84,29 @@ def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
 
 if __name__ == '__main__':
 
-    high_path = '/'
-    step1_path = 'S3_hyundai/1.div&remove'
-    step2_path = 'S3_hyundai/2.parsing_done'
-    space = "03_Urban"
-    dataset = "HKMC-N2202209-240220"
+    s3_path = 'S3_hyundai'
+    step_path = 'step1'
 
-    for sequence_set in os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}/"):
-        annotation_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/annotations/"
+    given_data_path = '0.given_data'
+    div_remove_path = '1.div&remove'
+    parsing_done_path = '2.parsing_done'
+
+    space = "01_Hightway"
+    dataset = "HKMC-N2202209-240208"
+
+    os.chdir('../../../')
+    base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
+
+    for sequence_set in os.listdir(f"{base_path}/{div_remove_path}/{space}/{dataset}/"):
+        annotation_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}/annotations/"
 
         if not os.path.exists(annotation_folder):
-            pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin/"
-            pointclouds_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds/"
+            PCDBIN_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}/pcd bin/"
+            pointclouds_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}/pointclouds/"
 
-            for pcdbin_file in tqdm(os.listdir(pcdbin_folder)):
-                input_file = os.path.join(pcdbin_folder, pcdbin_file)
-                output_file = os.path.join(pointclouds_folder, os.path.splitext(pcdbin_file)[0] + ".pcd")
+            for PCDBIN_file in tqdm(os.listdir(PCDBIN_folder)):
+                input_file = os.path.join(PCDBIN_folder, PCDBIN_file)
+                output_file = os.path.join(pointclouds_folder, os.path.splitext(PCDBIN_file)[0] + ".pcd")
 
                 pre_processing_done_df = pcdbin_parser(input_file)
                 pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file)
@@ -107,7 +117,15 @@ if __name__ == '__main__':
 
         else:
             print(f"Error [이미 폴더 생성 완료]", sequence_set)
-    # if not os.path.exists(f"{high_path}/{step2_path}/"):
-    #     os.makedirs(f"{high_path}/{step2_path}/")
 
-    # shutil.move(f"{high_path}/{step1_path}/{space}/",f"{high_path}/{step2_path}/{space}/")
+    for i, sequence_set in enumerate(os.listdir(f"{base_path}/{div_remove_path}/{space}/{dataset}")):
+        PCDBIN_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}/pcd bin"
+        pointclouds_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}/pointclouds"
+
+        rename_files.rename_files(pointclouds_folder)
+
+        if os.path.exists(PCDBIN_folder):
+            shutil.rmtree(PCDBIN_folder)
+
+        shutil.make_archive(f"{base_path}/{div_remove_path}/{space}/{dataset}/{sequence_set}",
+                            'zip', root_dir=f"{base_path}/{parsing_done_path}/{space}/{dataset}/{sequence_set}")
