@@ -1,13 +1,13 @@
 import numpy as np
-from function_set import GT_Box_post_processing as GTB
-from function_set import GT_Property_post_processing as GTP
-from function_set import TRUNCATION
+from S3_hyundai.hansol_code.step1.function_set import GT_Property_post_processing as GTP, GT_Box_post_processing as GTB, \
+    TRUNCATION
 import json
 import pandas as pd
 import os
+from datetime import datetime
 
 if __name__ == '__main__':
-    high_path = 'C:/Users/pc/SS-233/hyundai_code'
+    high_path = '/'
     step1_path = 'S3_hyundai/1.div&remove'
     step2_path = 'S3_hyundai/2.parsing_done'
     step3_path = 'S3_hyundai/3.working_done'
@@ -67,7 +67,8 @@ if __name__ == '__main__':
             print(f" '{folder_name}--LDR_GT_Property' 폴더는 이미 생성 되었습니다. ")
         # TODO BOX
         # 생성된 폴더 확인 및 생성
-        if not os.path.exists(f"{cuboid_test}/LDR_GT_BO1"):
+        today = str(datetime.today().year)[2:] + str(datetime.today().month).zfill(2) + str(datetime.today().day).zfill(2)
+        if not os.path.exists(f"{cuboid_test}/{today}-LDR_GT_BOX"):
             field = np.array([(-1, 0), (20, 50), (120, 50), (120, -50), (20, -50), (-1, 0)])
 
             # 입력 폴더 내의 모든 JSON 파일 목록 가져오기
@@ -89,11 +90,11 @@ if __name__ == '__main__':
                 output_json['FRAME_LIST'].append(frame)
 
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
-            output_file = os.path.join(f"{cuboid_test}/LDR_GT_BOX123", box_filename)
-            os.makedirs(f"{cuboid_test}/LDR_GT_BOX123")
+            output_file = os.path.join(f"{cuboid_test}/{today}-LDR_GT_BOX", box_filename)
+            os.makedirs(f"{cuboid_test}/{today}-LDR_GT_BOX")
             with open(output_file, 'w') as f:
                 json.dump(output_json, f, indent=2)
-            print(f" '{folder_name}--LDR_GT_BOX' 폴더가 생성 되었습니다. ")
+            print(f" '{folder_name}--{today}-LDR_GT_BOX' 폴더가 생성 되었습니다. ")
 
         else:
             print(f" '{folder_name}--LDR_GT_BOX' 폴더는 이미 생성 되었습니다. ")

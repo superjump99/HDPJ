@@ -81,7 +81,7 @@ def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
 
 if __name__ == '__main__':
 
-    high_path = 'C:/Users/pc/SS-233/hyundai_code'
+    high_path = '/'
     step1_path = 'S3_hyundai/1.div&remove'
     step2_path = 'S3_hyundai/2.parsing_done'
     space = "03_Urban"

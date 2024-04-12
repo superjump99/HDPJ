@@ -34,13 +34,13 @@ def round_float(input_json,idx):
     if len(input_json["labels"]) != 0:
         print(len(input_json['labels']))
         for idx in range(len(input_json['labels'])):
-            input_json["labels"][idx]["box3d"]["dimension"]["width"] = math.ceil(input_json["labels"][idx]["box3d"]["dimension"]["width"] * 100) /100
-            input_json["labels"][idx]["box3d"]["dimension"]["length"] = math.ceil(input_json["labels"][idx]["box3d"]["dimension"]["length"] * 100) /100
-            input_json["labels"][idx]["box3d"]["dimension"]["height"] = math.ceil(input_json["labels"][idx]["box3d"]["dimension"]["height"] * 100) /100
-            input_json["labels"][idx]["box3d"]["location"]["x"] = math.ceil(input_json["labels"][idx]["box3d"]["location"]["x"] * 100) /100
-            input_json["labels"][idx]["box3d"]["location"]["y"] = math.ceil(input_json["labels"][idx]["box3d"]["location"]["y"] * 100) /100
-            input_json["labels"][idx]["box3d"]["location"]["z"] = math.ceil(input_json["labels"][idx]["box3d"]["location"]["z"] * 100) /100
-            input_json["labels"][idx]["box3d"]["orientation"]["rotationYaw"] = math.ceil(input_json["labels"][idx]["box3d"]["orientation"]["rotationYaw"] * 10000) / 10000
+            input_json["labels"][idx]["box3d"]["dimension"]["width"] = round(input_json["labels"][idx]["box3d"]["dimension"]["width"],2)
+            input_json["labels"][idx]["box3d"]["dimension"]["length"] = round(input_json["labels"][idx]["box3d"]["dimension"]["length"],2)
+            input_json["labels"][idx]["box3d"]["dimension"]["height"] = math.floor(input_json["labels"][idx]["box3d"]["dimension"]["height"]*100)/100
+            input_json["labels"][idx]["box3d"]["location"]["x"] = round(input_json["labels"][idx]["box3d"]["location"]["x"],2)
+            input_json["labels"][idx]["box3d"]["location"]["y"] = round(input_json["labels"][idx]["box3d"]["location"]["y"],2)
+            input_json["labels"][idx]["box3d"]["location"]["z"] = round(input_json["labels"][idx]["box3d"]["location"]["z"],2)
+            input_json["labels"][idx]["box3d"]["orientation"]["rotationYaw"] = round(input_json["labels"][idx]["box3d"]["orientation"]["rotationYaw"],4)
             input_json["labels"][idx]["box3d"]["orientation"]["rotationPitch"] = 0
             input_json["labels"][idx]["box3d"]["orientation"]["rotationPitch"] = 0
 
@@ -48,7 +48,7 @@ def round_float(input_json,idx):
 
 if __name__ == "__main__":
 
-    high_path = 'C:/Users/pc/SS-233/hyundai_code'
+    high_path = '/'
     step1_path = 'S3_hyundai/1.div&remove'
     step2_path = 'S3_hyundai/2.parsing_done'
     step3_path = 'S3_hyundai/3.working_done'
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     sequenceset = "HKMC-N2202209-240111"
     dataset = "CUBOID_TEST"
     xx = "C:/Users/pc/SS-233/hyundai_code/S3_hyundai/3.working_done/CUBOID_TEST/annotations"
-    outfolder = "C:/Users/pc/SS-233/hyundai_code/S3_hyundai/3.working_done/CUBOID_TEST/annotations/annotations_검수"
+    outfolder = "C:/Users/pc/SS-233/hyundai_code/S3_hyundai/3.working_done/CUBOID_TEST/annotations_검수/annotations"
 
 
     json_files = [f for f in os.listdir(xx) if f.endswith('.json')]

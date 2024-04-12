@@ -1,5 +1,18 @@
 import os
-import shutil
+
+def find_files_with_remainder_zero(folder_path):
+
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.pcdbin'):
+            file_number = int(filename.split('.')[0])
+            if file_number % 25 != 0:
+                os.remove(os.path.join(folder_path, filename))
+
+        if filename.endswith('.jpg'):
+            file_number = int(filename.split('.')[0])
+            if file_number % 25 != 0:
+                os.remove(os.path.join(folder_path, filename))
+    return
 
 def rename_files(folder):
     # 입력 폴더에서 파일 목록 가져오기
@@ -30,37 +43,29 @@ def rename_files(folder):
             # 파일 이름 변경
             os.rename(old_path, new_path)
 
-def find_files_with_remainder_zero(folder_path):
 
-    for filename in os.listdir(folder_path):
-        if filename.endswith('.pcd'):
-            file_number = int(filename.split('.')[0])
-            if file_number % 25 != 0:
-                os.remove(os.path.join(folder_path, filename))
-
-        if filename.endswith('.jpg'):
-            file_number = int(filename.split('.')[0])
-            if file_number % 25 != 0:
-                os.remove(os.path.join(folder_path, filename))
-    return
-
-# 사용 예시
 if __name__ == '__main__':
-    high_path = 'C:/Users/pc/SS-233/hyundai_code'
+
+    high_path = '/'
     given_path = 'S3_hyundai/0.given_data'
     step1_path = 'S3_hyundai/1.div&remove'
-    space = "03_Urban"
-    dataset = "HKMC-N2202209-240220"
+    space = "00_sample"
+    dataset = "HKMC-N2202209-240111"
 
     for i, sequence_set in enumerate(os.listdir(f"{high_path}/{step1_path}/{space}/{dataset}")):
-
-        pointclouds_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pointclouds"
         pcdbin_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/pcdbin"
+        imageFC_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT"
+        imageFR_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_RIGHT"
+        imageFL_folder = f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}/images/CAM_FRONT_LEFT"
+        find_files_with_remainder_zero(pcdbin_folder)
+        # rename_files(pcdbin_folder)
 
-        rename_files(pointclouds_folder)
+        find_files_with_remainder_zero(imageFC_folder)
+        rename_files(imageFC_folder)
 
-        if os.path.exists(pcdbin_folder):
-            shutil.rmtree(pcdbin_folder)
+        find_files_with_remainder_zero(imageFR_folder)
+        rename_files(imageFR_folder)
 
-        shutil.make_archive(f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}",
-                            'zip', root_dir=f"{high_path}/{step1_path}/{space}/{dataset}/{sequence_set}")
+        find_files_with_remainder_zero(imageFL_folder)
+        rename_files(imageFL_folder)
+

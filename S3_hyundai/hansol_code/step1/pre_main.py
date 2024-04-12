@@ -1,12 +1,11 @@
-from function_set import preprocess
+from S3_hyundai.hansol_code.step1.function_set import preprocess
 from tqdm import tqdm
-import shutil
 import os
 
 if __name__ == '__main__':
 
     print("🤍🤍🤍 파싱 및 전처리 코드 실행 🤍🤍🤍")
-    path = "C:/Users/pc/SS-233/hyundai_code"
+    path = "/"
     dataset = 'HKMC-N2202209-240220'
     given_pcd_folder = f"{path}/S3_hyundai/0.given_data/{dataset}/LDR_Raw_PCD"
     given_image_folder = f"{path}/S3_hyundai/0.given_data/{dataset}/LDR_Raw_Image"
@@ -36,7 +35,7 @@ if __name__ == '__main__':
                 output_file_path = os.path.join(pcd_folder, os.path.splitext(pcdbin_file)[0] + ".pcd")
 
                 # pcdbin parsing
-                parsing_result = preprocess.pcdbin_parser(input_file_path,sequence[12:])
+                parsing_result = preprocess.pcdbin_parser(input_file_path, sequence[12:])
 
                 preprocess.data_preprocesser(parsing_result, output_file_path)
             print(f"✅✅ '{sequence[12:]}' 데이터 파싱 및 전처리 완료 ✅✅")

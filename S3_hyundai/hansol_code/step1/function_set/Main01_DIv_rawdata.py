@@ -4,7 +4,7 @@ import shutil
 
 if __name__ == '__main__':
 
-    high_path = 'C:/Users/pc/SS-233/hyundai_code'
+    high_path = '/'
     given_path = 'S3_hyundai/0.raw_data'
     step1_path = 'S3_hyundai/1.div&remove'
     space = "01_Hightway"
