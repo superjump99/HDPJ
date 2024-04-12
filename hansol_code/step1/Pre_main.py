@@ -19,7 +19,6 @@ if __name__ == '__main__':
     dataset = "HKMC-N2202209-240208"
 
     os.chdir('../../')
-    # print(os.getcwd())
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
     for i, sequence_set in enumerate(os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/LDR_Raw_PCD/")):
         # print(sequence_set)
