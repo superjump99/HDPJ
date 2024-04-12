@@ -90,10 +90,10 @@ if __name__ == "__main__":
     #
     #     json_files = [f for f in os.listdir(annotation_folder) if f.endswith('.json')]
     #
-    #     for idx,json_file in enumerate(json_files):
-    #         pcdfile_num = int(json_file[:6])
+    #     for idx,box_file in enumerate(json_files):
+    #         pcdfile_num = int(box_file[:6])
     #
-    #         with open(os.path.join(annotation_folder, json_file), 'r') as f:
+    #         with open(os.path.join(annotation_folder, box_file), 'r') as f:
     #             data = json.load(f)
     #
     #
