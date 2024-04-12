@@ -25,7 +25,7 @@ if __name__ == '__main__':
                 div_folder = f"{base_path}/{div_remove_path}/{space}/{dataset}"
 
                 source_folder = f"{given_folder}/LDR_Raw_PCD/LDR_Raw_PCD-{sequence_set[12:]}/"
-                target_folder = f"{div_folder}/{sequence_set[12:]}/pcdbin/"
+                target_folder = f"{div_folder}/{sequence_set[12:]}/pcd bin/"
                 shutil.copytree(source_folder, target_folder)
 
                 source_folder = f"{given_folder}/LDR_Raw_Image/LDR_Raw_Image-{sequence_set[12:]}/ImageFC"
