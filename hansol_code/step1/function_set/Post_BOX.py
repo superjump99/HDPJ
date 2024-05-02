@@ -7,7 +7,7 @@ stage_list = ['0.NotAnnotated','1.AutomaticallyAnnotated','2.ManuallyRefined','3
 parameter
 """
 
-stage = stage_list[0]
+stage = stage_list[3]
 # print(stage)
 inspction_step = 0
 
@@ -32,7 +32,7 @@ def change_frame_metadata(num,pcdnum,start_time):
                     # TODO Fix NUMBER value
                     "NUMBER": num*50,
                     # TODO Fix TIMESTAMP value
-                    "TIMESTAMP": str(start_time + datetime.timedelta(seconds=0.5) + datetime.timedelta(seconds=pcdnum*0.5)),
+                    "TIMESTAMP": str(start_time + datetime.timedelta(seconds=num*5)),
                     "STAGE": stage,
                     "INSPECTION_STEP": inspction_step
                 }
@@ -43,7 +43,7 @@ def change_object_list(input_df):
     try:
         for i in range(len(input_df)):
             frame = input_df.iloc[i].to_dict()
-            label = [{
+            label = {
                     "CLASS": str(frame['category']),
                     "OCCLUSION": str(frame['OCCLUSION']),
                     "TRUNCATION": round(frame['truncation'], 2),
@@ -58,7 +58,7 @@ def change_object_list(input_df):
                         round(frame["height"], 2)
                     ],
                     "HEADING": round(frame["rotationYaw"], 4),
-                }]
+                }
 
             object_list.append(label)
     except KeyError:
