@@ -12,6 +12,7 @@ def load_json_annotations(file_path):
     converted_data = [
         {
             "category": label['category'],
+            "id": label['id'],
             "x": label["box3d"]["location"]["x"],
             "y": label["box3d"]["location"]["y"],
             "z": label["box3d"]["location"]["z"],
@@ -65,6 +66,7 @@ def truncation(field, df):
         else:
             rating = 0
         truncation_list.append(rating)
+        plt.close()
 
     df['truncation'] = truncation_list
     return df
