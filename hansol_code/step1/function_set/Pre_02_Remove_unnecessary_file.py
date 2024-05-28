@@ -2,18 +2,22 @@ import os
 import Pre_04_rename_files as rename_files
 
 
-def find_files_with_remainder_zero(folder_path):  # 25로 나눠지는 파일만 가져가기
-
+def remove_files(folder_path):
     for filename in os.listdir(folder_path):
         if filename.endswith('.pcdbin'):
-            file_number = int(filename.split('.')[0])
-            if file_number % 25 != 0:
-                os.remove(os.path.join(folder_path, filename))
-
+            try:
+                file_number = int(filename.split('.')[0])
+                if file_number % 50 != 0:
+                    os.remove(os.path.join(folder_path, filename))
+            except ValueError:
+                continue    # file names that can't be converted to numbers are ignored
         if filename.endswith('.jpg'):
-            file_number = int(filename.split('.')[0])
-            if file_number % 25 != 0:
-                os.remove(os.path.join(folder_path, filename))
+            try:
+                file_number = int(filename.split('.')[0])
+                if file_number % 25 != 0:
+                    os.remove(os.path.join(folder_path, filename))
+            except ValueError:
+                continue  # file names that can't be converted to numbers are ignored
     return
 
 
@@ -37,14 +41,14 @@ if __name__ == '__main__':
         imageFC_folder = f"{div_folder}/images/CAM_FRONT"
         imageFR_folder = f"{div_folder}/images/CAM_FRONT_RIGHT"
         imageFL_folder = f"{div_folder}/images/CAM_FRONT_LEFT"
-        find_files_with_remainder_zero(PCDBIN_folder)
+        remove_files(PCDBIN_folder)
         # rename_files(PCDBIN_folder)
 
-        find_files_with_remainder_zero(imageFC_folder)
+        remove_files(imageFC_folder)
         rename_files.rename_files(imageFC_folder)
 
-        find_files_with_remainder_zero(imageFR_folder)
+        remove_files(imageFR_folder)
         rename_files.rename_files(imageFR_folder)
 
-        find_files_with_remainder_zero(imageFL_folder)
+        remove_files(imageFL_folder)
         rename_files.rename_files(imageFL_folder)

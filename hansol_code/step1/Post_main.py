@@ -15,11 +15,14 @@ if __name__ == '__main__':
     working_done_path = '3.working_done'
     out_path = '4.out'
 
-    space = "01_Hightway"
-    dataset = "HKMC-N2202209-240208"
+    road = ['01_Highway', '03_Urban']
+    space = road[0]
 
     os.chdir('../../')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
+
+    dataset = os.listdir(f"{base_path}/{working_done_path}/{space}/")[0]
+
 
     today = (str(datetime.today().year)[2:] + str(datetime.today().month).zfill(2) +
              str(datetime.today().day).zfill(2))
@@ -57,9 +60,9 @@ if __name__ == '__main__':
 
             with open(output_file, 'w') as f:
                 json.dump(output_json, f, indent=2)
-            print(f" '{folder_name}--LDR_GT_Property' 폴더가 생성 되었습니다. ")
+            print(f" [{folder_name}--LDR_GT_Property] 폴더가 생성 되었습니다. ")
         else:
-            print(f" '{folder_name}--LDR_GT_Property' 폴더는 이미 생성 되었습니다. ")
+            print(f" [{folder_name}--LDR_GT_Property] 폴더는 이미 생성 되었습니다. ")
 
         # TODO BOX
         # 생성된 폴더 확인 및 생성
@@ -91,8 +94,8 @@ if __name__ == '__main__':
             os.makedirs(f"{base_path}/{working_done_path}/{space}/{dataset}/{folder_name}/LDR_GT_BOX")
             with open(output_file, 'w') as f:
                 json.dump(output_json, f, indent=2)
-            print(f" '{folder_name}--{today}-LDR_GT_BOX' 폴더가 생성 되었습니다. ")
+            print(f" [{folder_name}--{today}-LDR_GT_BOX] 폴더가 생성 되었습니다. ")
 
         else:
-            print(f" '{folder_name}--LDR_GT_BOX' 폴더는 이미 생성 되었습니다. ")
+            print(f" [{folder_name}--LDR_GT_BOX] 폴더는 이미 생성 되었습니다. ")
     print(" 후처리 코드 종료 ")

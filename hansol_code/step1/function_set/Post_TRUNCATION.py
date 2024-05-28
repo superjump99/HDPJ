@@ -62,7 +62,10 @@ def truncation(field, df):
         if not field_polygon.contains(box_polygon):
             # 박스와 필드의 차집합 영역 계산
             difference_area = box_polygon.difference(field_polygon).area
+            # try:
             rating = difference_area / box_polygon.area
+            # except:
+            #     rating = 0
         else:
             rating = 0
         truncation_list.append(rating)

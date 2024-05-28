@@ -44,13 +44,12 @@ def pcdbin_parser(input_file_path):
 # TODO Preprocessing
 def pre_process(df):
     # ROI 관련 범위 종방향 0 < x < 120m, 횡방향 -50 < y < 50m
-    df = df[df['x_veh'] < 130]
-    df = df[df['y_veh'] < 60]
-    df = df[df['z_veh'] > -60]
-
     # 잔상으로 판별되는 layer 값 56~63 제거
-    df = df[df['layer'] < 56]
-    df.reset_index(drop=True, inplace=True)
+    df = df[(df['x_veh'] < 130) % (df[df['y_veh'] < 60]) & df[df['y_veh'] > -60] & (df['layer'] < 56)]
+    # df = df[df['y_veh'] < 60]
+    # df = df[df['z_veh'] > -60]
+    # df = df[df['layer'] < 56]
+    # df.reset_index(drop=True, inplace=True)
     return df
 
 
@@ -69,8 +68,10 @@ def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
 
     #  TODO 0:x_veh, 1:y_veh, 2:z_veh, 14:intensity
     table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
-    if not os.path.exists(pointclouds_folder):
-        os.makedirs(pointclouds_folder)
+
+    # if the point cloud folder does not exist, make it
+    os.makedirs(pointclouds_folder, exist_ok=True)
+
     with open(output_file_path, 'w+') as output_file:
         output_file.write('\n'.join(header_lines) + '\n')
 

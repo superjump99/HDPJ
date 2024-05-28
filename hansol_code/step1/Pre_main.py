@@ -3,7 +3,7 @@ import shutil
 
 from tqdm import tqdm
 
-from hansol_code.step1.function_set.Pre_02_Remove_unnecessary_file import find_files_with_remainder_zero
+from hansol_code.step1.function_set.Pre_02_Remove_unnecessary_file import remove_files
 from hansol_code.step1.function_set.Pre_03_Data_parsing import pcdbin_parser, pcdbin_to_pcd
 from hansol_code.step1.function_set.Pre_04_rename_files import rename_files
 
@@ -21,7 +21,6 @@ if __name__ == '__main__':
     os.chdir('../../')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
     for i, sequence_set in enumerate(os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/LDR_Raw_PCD/")):
-        # print(sequence_set)
         try:
             if not os.path.exists(f"{base_path}/{given_data_path}/{space}/{dataset}/{sequence_set[12:]}"):
                 given_folder = f"{base_path}/{given_data_path}/{space}/{dataset}"
@@ -53,16 +52,16 @@ if __name__ == '__main__':
         imageFC_folder = f"{div_folder}/images/CAM_FRONT"
         imageFR_folder = f"{div_folder}/images/CAM_FRONT_RIGHT"
         imageFL_folder = f"{div_folder}/images/CAM_FRONT_LEFT"
-        find_files_with_remainder_zero(PCDBIN_folder)
+        remove_files(PCDBIN_folder)
         # rename_files(PCDBIN_folder)
 
-        find_files_with_remainder_zero(imageFC_folder)
+        remove_files(imageFC_folder)
         rename_files.rename_files(imageFC_folder)
 
-        find_files_with_remainder_zero(imageFR_folder)
+        remove_files(imageFR_folder)
         rename_files.rename_files(imageFR_folder)
 
-        find_files_with_remainder_zero(imageFL_folder)
+        remove_files(imageFL_folder)
         rename_files.rename_files(imageFL_folder)
 
     for sequence_set in os.listdir(f"{base_path}/{div_remove_path}/{space}/{dataset}/"):
