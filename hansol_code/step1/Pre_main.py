@@ -1,16 +1,22 @@
 import os
-import shutil
-
-from tqdm import tqdm
-
-from hansol_code.step1.function_set.Pre_02_Remove_unnecessary_file import remove_files
-from hansol_code.step1.function_set.Pre_03_Data_parsing import pcdbin_parser, pcdbin_to_pcd
-from hansol_code.step1.function_set.Pre_04_rename_files import rename_files
+# import shutil
+#
+# from tqdm import tqdm
+#
+# from hansol_code.step1.function_set.Pre_02_Remove_unnecessary_file import remove_files
+# from hansol_code.step1.function_set.Pre_03_Data_parsing import pcdbin_parser, pcdbin_to_pcd
+# from hansol_code.step1.function_set.Pre_04_rename_files import rename_files
 
 if __name__ == '__main__':
-    s3_path = 'S3_hyundai'
-    step_path = 'step1'
-
+    print(os.getcwd())
+    bucket_name = 'coop-selectstar-7000527-241231/'
+    step = ['01_Label/', '02_Inspection/']
+    senser = ['01_IRIS_JX013/', '02_PANDAR_MV/']
+    space = ['01_Highway/', '02_ParkingLot/', '03_Urban/']
+    os.chdir('../../')
+    print(os.getcwd())
+    exit()
+    middle_folder = ''
     given_data_path = '0.given_data'
     div_remove_path = '1.div&remove'
     parsing_done_path = '2.parsing_done'
@@ -18,7 +24,10 @@ if __name__ == '__main__':
     space = "01_Hightway"
     dataset = "HKMC-N2202209-240208"
 
-    os.chdir('../../')
+    aws_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
+    space = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
+    dataset = os.path.join(base_path, dataset)
+    exit()
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
     for i, sequence_set in enumerate(os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/LDR_Raw_PCD/")):
         try:
