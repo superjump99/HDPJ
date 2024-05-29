@@ -13,13 +13,15 @@ if __name__ == '__main__':
     space_list = ['', '01_Highway/', '02_ParkingLot/', '03_Urban/']
 
     step = step_list[1]
-    sensor = sensor_list[2]
-    space = space_list[1]
+    sensor = sensor_list[1]
+    space = space_list[3]
     middle_folder_name = 'HKMC-N2310382-240411'
 
     # STEP 1: Set base file
     base_path = os.path.join(f'{os.getcwd()}/{bucket_name}/{step}/{sensor}/{space}/')
     if not os.path.exists(base_path): os.makedirs(base_path)
+    if os.listdir(base_path): middle_folder_name = os.listdir(base_path)[0]
+
     middle_folder = os.path.join(f'{base_path}/{middle_folder_name}')
     if not os.path.exists(f'{middle_folder}'): os.makedirs(middle_folder)
     if not os.path.exists(f'{middle_folder}/LDR_GT_Point/'): os.makedirs(f'{middle_folder}/LDR_GT_Point/')
@@ -96,6 +98,5 @@ if __name__ == '__main__':
 
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
             shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
-    #
         # shutil.make_archive(f"{DATA_path}/{sequence_set}",
         #                     'zip', root_dir=f"{DATA_path}/{sequence_set}")
