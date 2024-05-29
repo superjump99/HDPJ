@@ -13,15 +13,15 @@ def sequence_metadata(data, version):
     }
     return seq_data
 
-def sence_curation(data):
-    sence_data = {
+def scene_curation(data):
+    scene_data = {
         "COUNTRY": data["COUNTRY"],
         "WEATHER": data["WEATHER"],
         "ILLUMINATION": data["ILLUMINATION"],
         "ROAD": data["ROAD"],
         "ROAD_SURFACE": data["ROAD_SURFACE"],
     }
-    return sence_data
+    return scene_data
 
 def convert_to_new_format(seq_data,sence_data):
         output_json = {

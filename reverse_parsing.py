@@ -18,7 +18,7 @@ if __name__ == '__main__':
     space = "03_Urban"
     dataset = "HKMC-N2202209-240220"
 
-    os.chdir('../../')
+    os.chdir('/')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
     dataset_list = os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/")
     for sequence_set in dataset_list:
