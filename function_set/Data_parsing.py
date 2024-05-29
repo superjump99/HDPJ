@@ -3,7 +3,6 @@ import shutil
 import pandas as pd
 from tqdm import tqdm
 import struct
-import Pre_04_rename_files as rename_files
 
 # TODO 데이터 파싱
 def pcdbin_parser(input_file_path):
@@ -45,15 +44,15 @@ def pcdbin_parser(input_file_path):
 def pre_process(df):
     # ROI 관련 범위 종방향 0 < x < 120m, 횡방향 -50 < y < 50m
     # 잔상으로 판별되는 layer 값 56~63 제거
-    df = df[(df['x_veh'] < 130) % (df[df['y_veh'] < 60]) & df[df['y_veh'] > -60] & (df['layer'] < 56)]
-    # df = df[df['y_veh'] < 60]
-    # df = df[df['z_veh'] > -60]
-    # df = df[df['layer'] < 56]
-    # df.reset_index(drop=True, inplace=True)
+    # df = df[(df['x_veh'] < 130) % (df[df['y_veh'] < 60]) & df[df['y_veh'] > -60] & (df['layer'] < 56)]
+    df = df[df['y_veh'] < 60]
+    df = df[df['z_veh'] > -60]
+    df = df[df['layer'] < 56]
+    df.reset_index(drop=True, inplace=True)
     return df
 
 
-def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
+def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
     header_lines = [
         "VERSION .7",
         "FIELDS x y z intensity",
@@ -70,7 +69,7 @@ def pcdbin_to_pcd(pre_processing_done_df, pointclouds_folder, output_file_path):
     table = pre_processing_done_df.iloc[:, [0, 1, 2, 15]]
 
     # if the point cloud folder does not exist, make it
-    os.makedirs(pointclouds_folder, exist_ok=True)
+    # os.makedirs(pointclouds_folder, exist_ok=True)
 
     with open(output_file_path, 'w+') as output_file:
         output_file.write('\n'.join(header_lines) + '\n')
@@ -95,7 +94,7 @@ if __name__ == '__main__':
     space = "01_Hightway"
     dataset = "HKMC-N2202209-240208"
 
-    os.chdir('../../../')
+    os.chdir('../')
     base_path = os.path.join(f"{os.getcwd()}/{s3_path}/{step_path}/")
 
     for sequence_set in os.listdir(f"{base_path}/{div_remove_path}/{space}/{dataset}/"):
