@@ -6,7 +6,6 @@ from function_set.Remove_unnecessary_file import remove_files, rename_files
 from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
-    # print(os.getcwd())
     bucket_name = 'coop-selectstar-7000527-241231/'
     step_list = ['', '01_Label/', '02_Inspection/']
     sensor_list = ['', '01_IRIS_JX013/', '02_PANDAR_MV/']
@@ -69,8 +68,8 @@ if __name__ == '__main__':
         if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/annotations')):
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')): continue
+
         for pcdbin in tqdm(os.listdir(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))):
-            # print(pcdbin)
             input_file = os.path.join(DATA_path, f'{sequence_set}/pcdbin/{pcdbin}')
             output_file = os.path.join(DATA_path, f'{sequence_set}/pointclouds/{os.path.splitext(pcdbin)[0]}.pcd')
             if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
