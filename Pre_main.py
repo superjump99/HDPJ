@@ -7,13 +7,25 @@ from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
     bucket_name = 'coop-selectstar-7000527-241231/'
-    step_list = ['', '01_Label/', '02_Inspection/']
-    sensor_list = ['', '01_IRIS_JX013/', '02_PANDAR_MV/']
-    space_list = ['', '01_Highway/', '02_ParkingLot/', '03_Urban/']
+    ''' :parameter
+        step
+            :param  
+            '01_Label/'
+            '02_Inspection/'
+        sensor
+            :param
+            '01_IRIS_JX013/'
+            '02_PANDAR_MV/'
+        space
+            :param
+            '01_Highway/'
+            '02_ParkingLot/'
+            '03_Urban/'
+    '''
 
-    step = step_list[1]
-    sensor = sensor_list[1]
-    space = space_list[3]
+    step = '01_Label/'
+    sensor = '02_PANDAR_MV/'
+    space = "01_Highway/"
     middle_folder_name = 'HKMC-N2310382-240411'
 
     # STEP 1: Set base file
