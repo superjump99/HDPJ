@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
         for pcdbin in tqdm(os.listdir(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))):
             file_number = int(pcdbin.split('.')[0])
-            if file_number % 25 != 0:
+            if file_number % 25 == 0:
                 input_file = os.path.join(DATA_path, f'{sequence_set}/pcdbin/{pcdbin}')
                 output_file = os.path.join(DATA_path, f'{sequence_set}/pointclouds/{os.path.splitext(pcdbin)[0]}.pcd')
                 if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
