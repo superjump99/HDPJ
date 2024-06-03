@@ -6,6 +6,8 @@ from function_set.Remove_unnecessary_file import remove_files, rename_files
 from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
+    drive = 'D:/HDC/'
+    os.chdir(drive)
     bucket_name = 'coop-selectstar-7000527-241231/'
     ''' :parameter
         step
