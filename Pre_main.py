@@ -82,13 +82,15 @@ if __name__ == '__main__':
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')): continue
 
         for pcdbin in tqdm(os.listdir(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))):
-            input_file = os.path.join(DATA_path, f'{sequence_set}/pcdbin/{pcdbin}')
-            output_file = os.path.join(DATA_path, f'{sequence_set}/pointclouds/{os.path.splitext(pcdbin)[0]}.pcd')
-            if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
-                os.makedirs(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))
+            file_number = int(pcdbin.split('.')[0])
+            if file_number % 25 != 0:
+                input_file = os.path.join(DATA_path, f'{sequence_set}/pcdbin/{pcdbin}')
+                output_file = os.path.join(DATA_path, f'{sequence_set}/pointclouds/{os.path.splitext(pcdbin)[0]}.pcd')
+                if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
+                    os.makedirs(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))
 
-            pre_processing_done_df = pcdbin_parser(input_file)
-            pcdbin_to_pcd(pre_processing_done_df, output_file)
+                pre_processing_done_df = pcdbin_parser(input_file)
+                pcdbin_to_pcd(pre_processing_done_df, output_file)
 
     # STEP 4: Remove unnecessary file
     for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):

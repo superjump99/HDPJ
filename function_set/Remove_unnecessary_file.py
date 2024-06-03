@@ -5,8 +5,6 @@ def remove_files(folder_path):
         if filename.endswith('.pcdbin'):
             try:
                 file_number = int(filename.split('.')[0])
-                if file_number == 0:
-                    return
                 if file_number % 25 != 0:
                     os.remove(os.path.join(folder_path, filename))
             except ValueError:
