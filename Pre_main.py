@@ -51,7 +51,7 @@ if __name__ == '__main__':
     for i, sequence_set in enumerate(os.listdir(RAW_PCD_path)):
         try:
             sequence_pcd_path = os.path.join(DATA_path, f'{sequence_set[12:]}/pcdbin')
-            if not os.path.exists(sequence_pcd_path):
+            if not os.path.exists(os.path.join(DATA_path, f'{sequence_set[12:]}/pointclouds/')):
                 source_folder = f"{RAW_PCD_path}/{sequence_set}/"
                 target_folder = f"{sequence_pcd_path}/"
                 shutil.copytree(source_folder, target_folder)
