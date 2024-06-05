@@ -2,7 +2,7 @@ import os
 
 def remove_files(folder_path):
     for filename in os.listdir(folder_path):
-        if filename.endswith('.pcdbin'):
+        if filename.endswith('.pcd'):
             try:
                 file_number = int(filename.split('.')[0])
                 if file_number % 25 != 0:
@@ -31,7 +31,7 @@ def rename_files(folder_path):
         if old_name == 0:
             return
 
-        if old_name.endswith('.pcdbin'):
+        if old_name.endswith('.pcd'):
             new_name = f"{i:06d}.pcd"
 
             old_path = os.path.join(folder_path, old_name)
