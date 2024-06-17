@@ -47,8 +47,10 @@ if __name__ == '__main__':
     RAW_Image_path = os.path.join(middle_folder, 'LDR_RAW_Image')
     DATA_path = os.path.join(middle_folder, 'DATA')
 
-    # STEP 2: Copy Raw data
-    print("Step 2. Copy Raw PCD")
+    # STEP 2. Copy Raw Data
+    print("Step 2. Copy Raw Data")
+    # STEP 2-1: Copy Raw PCD
+    print("Step 2-1. Copy Raw PCD")
     for i, sequence_set in enumerate(os.listdir(RAW_PCD_path)):
         try:
             sequence_pcd_path = os.path.join(DATA_path, f'{sequence_set[12:]}/pcdbin')
@@ -59,7 +61,9 @@ if __name__ == '__main__':
 
         except FileExistsError:
             print(f"{i + 1} [PCD copy already completed]", sequence_set[12:])
-    print("Step 2. Copy Raw Image")
+
+    # STEP 2-2: Copy Raw Images
+    print("Step 2-2. Copy Raw Image")
     for i, sequence_set in enumerate(os.listdir(RAW_Image_path)):
         try:
             sequence_image_path = os.path.join(DATA_path, f'{sequence_set[14:]}/images')
@@ -79,14 +83,37 @@ if __name__ == '__main__':
         except FileExistsError:
             print(f"{i + 1} [Image copy already completed]", sequence_set[12:])
 
-    # STEP 3. Parsing data
-    print("Step 3. Parsing ")
+    # STEP 3. Preprocessing
+    print("STEP 3. Preprocessing")
     for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
         print(f"{i + 1} [Check], {sequence_set}")
         if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/annotations')):
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
-        if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')): continue
 
+        # STEP 3-1: Check older data: Remove and rename PCD files
+        data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
+        if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
+            if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))[0] == '000000.pcd':
+                remove_files(os.path.join(data_sequence_path, 'pointclouds'))
+                rename_files(os.path.join(data_sequence_path, 'pointclouds'))
+            else:
+                pass
+
+        # STEP 3-1: Check older data: Remove and rename Images files
+        if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/images')):
+            if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/images/CAM_FRONT'))[0] == '000000.jpg':
+                remove_files(os.path.join(data_sequence_path, 'images/CAM_FRONT/'))
+                rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT/'))
+
+                remove_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_LEFT/'))
+                rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_LEFT/'))
+
+                remove_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_RIGHT/'))
+                rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_RIGHT/'))
+            else:
+                pass
+
+        # STEP 3-3. Parsing data
         for pcdbin in os.listdir(os.path.join(RAW_PCD_path, sequence_set)):
             file_number = int(pcdbin.split('.')[0])
             if file_number % 25 == 0:
@@ -98,7 +125,7 @@ if __name__ == '__main__':
                 pre_processing_done_df = pcdbin_parser(input_file)
                 pcdbin_to_pcd(pre_processing_done_df, output_file)
 
-        # STEP 4: Remove unnecessary file
+        # STEP 3-4: Remove and Rename current data PCD,images files
         data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
 
         remove_files(os.path.join(data_sequence_path, 'pointclouds'))
@@ -111,8 +138,9 @@ if __name__ == '__main__':
         rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_LEFT/'))
         rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_RIGHT/'))
 
-        # STEP 5. mk zip
+        # STEP 3-5: Remove pcdbin folder
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
             shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
+        # STEP 5. mk zip
         # shutil.make_archive(f"{DATA_path}/{sequence_set}",
         #                     'zip', root_dir=f"{DATA_path}/{sequence_set}")
