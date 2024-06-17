@@ -6,8 +6,8 @@ from function_set.Remove_unnecessary_file import remove_files, rename_files
 from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
-    drive = 'D:/HDC/'
-    os.chdir(drive)
+    # drive = 'D:/HDC/'
+    # os.chdir(drive)
     bucket_name = 'coop-selectstar-7000527-241231/'
     ''' :parameter
         step
@@ -83,7 +83,7 @@ if __name__ == '__main__':
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')): continue
 
-        for pcdbin in tqdm(os.listdir(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))):
+        for pcdbin in os.listdir(os.path.join(RAW_PCD_path, sequence_set)):
             file_number = int(pcdbin.split('.')[0])
             if file_number % 25 == 0:
                 input_file = os.path.join(DATA_path, f'{sequence_set}/pcdbin/{pcdbin}')
@@ -94,8 +94,7 @@ if __name__ == '__main__':
                 pre_processing_done_df = pcdbin_parser(input_file)
                 pcdbin_to_pcd(pre_processing_done_df, output_file)
 
-    # STEP 4: Remove unnecessary file
-    for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
+        # STEP 4: Remove unnecessary file
         data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
 
         remove_files(os.path.join(data_sequence_path, 'pointclouds'))
@@ -108,9 +107,7 @@ if __name__ == '__main__':
         rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_LEFT/'))
         rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_RIGHT/'))
 
-    # STEP 5. mk zip
-    for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
-
+        # STEP 5. mk zip
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
             shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
         # shutil.make_archive(f"{DATA_path}/{sequence_set}",
