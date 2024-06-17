@@ -6,8 +6,8 @@ from function_set.Remove_unnecessary_file import remove_files, rename_files
 from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
-    # drive = 'D:/HDC/'
-    # os.chdir(drive)
+    drive = 'D:/HDC/'
+    os.chdir(drive)
     bucket_name = 'coop-selectstar-7000527-241231/'
     ''' :parameter
         step
@@ -48,6 +48,7 @@ if __name__ == '__main__':
     DATA_path = os.path.join(middle_folder, 'DATA')
 
     # STEP 2: Copy Raw data
+    print("Step 2. Copy Raw PCD")
     for i, sequence_set in enumerate(os.listdir(RAW_PCD_path)):
         try:
             sequence_pcd_path = os.path.join(DATA_path, f'{sequence_set[12:]}/pcdbin')
@@ -57,8 +58,8 @@ if __name__ == '__main__':
                 shutil.copytree(source_folder, target_folder)
 
         except FileExistsError:
-            print(f"{i + 1} [폴더 이미 존재]", sequence_set[14:])
-
+            print(f"{i + 1} [PCD copy already completed]", sequence_set[12:])
+    print("Step 2. Copy Raw Image")
     for i, sequence_set in enumerate(os.listdir(RAW_Image_path)):
         try:
             sequence_image_path = os.path.join(DATA_path, f'{sequence_set[14:]}/images')
@@ -76,10 +77,12 @@ if __name__ == '__main__':
                 shutil.copytree(source_folder, target_folder)
 
         except FileExistsError:
-            print(f"{i + 1} [폴더 이미 존재]", sequence_set[12:])
+            print(f"{i + 1} [Image copy already completed]", sequence_set[12:])
 
     # STEP 3. Parsing data
-    for sequence_set in os.listdir(f"{DATA_path}"):
+    print("Step 3. Parsing ")
+    for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
+        print(f"{i + 1} [Check], {sequence_set}")
         if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/annotations')):
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')): continue
