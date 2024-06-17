@@ -58,6 +58,7 @@ if __name__ == '__main__':
 
         except FileExistsError:
             print(f"{i + 1} [폴더 이미 존재]", sequence_set[14:])
+
     for i, sequence_set in enumerate(os.listdir(RAW_Image_path)):
         try:
             sequence_image_path = os.path.join(DATA_path, f'{sequence_set[14:]}/images')
