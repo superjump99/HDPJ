@@ -86,18 +86,11 @@ if __name__ == '__main__':
     # STEP 3. Preprocessing
     print("STEP 3. Preprocessing")
     for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
+        data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
+
         print(f"{i + 1} [Check], {sequence_set}")
         if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/annotations')):
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
-
-        # STEP 3-1: Check older data: Remove and rename PCD files
-        data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
-        if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
-            if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))[0] == '000000.pcd':
-                remove_files(os.path.join(data_sequence_path, 'pointclouds'))
-                rename_files(os.path.join(data_sequence_path, 'pointclouds'))
-            else:
-                pass
 
         # STEP 3-1: Check older data: Remove and rename Images files
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/images')):
@@ -112,6 +105,14 @@ if __name__ == '__main__':
                 rename_files(os.path.join(data_sequence_path, 'images/CAM_FRONT_RIGHT/'))
             else:
                 pass
+
+        # STEP 3-2: Check older data: Remove and rename PCD files
+        if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
+            if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))[0] == '000000.pcd':
+                remove_files(os.path.join(data_sequence_path, 'pointclouds'))
+                rename_files(os.path.join(data_sequence_path, 'pointclouds'))
+            else:
+                continue
 
         # STEP 3-3. Parsing data
         for pcdbin in os.listdir(os.path.join(RAW_PCD_path, sequence_set)):
