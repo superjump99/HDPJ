@@ -88,11 +88,12 @@ if __name__ == '__main__':
     for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
         data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
 
-        print(f"{i + 1} [Check], {sequence_set}")
+        print(f"{i + 1} [Check]: {sequence_set}")
         if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/annotations')):
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
 
         # STEP 3-1: Check older data: Remove and rename Images files
+        print(f"{i + 1} STEP 3-1: Check older data: Remove and rename Images files")
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/images')):
             if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/images/CAM_FRONT'))[0] == '000000.jpg':
                 remove_files(os.path.join(data_sequence_path, 'images/CAM_FRONT/'))
@@ -107,6 +108,7 @@ if __name__ == '__main__':
                 pass
 
         # STEP 3-2: Check older data: Remove and rename PCD files
+        print(f"{i + 1} STEP 3-2: Check older data: Remove and rename PCD files")
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
             if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))[0] == '000000.pcd':
                 remove_files(os.path.join(data_sequence_path, 'pointclouds'))
@@ -114,11 +116,11 @@ if __name__ == '__main__':
             else:
                 if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
                     shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
-                else:
-                    continue
+            continue
 
         # STEP 3-3. Parsing data
-        for pcdbin in os.listdir(os.path.join(RAW_PCD_path, sequence_set)):
+        print(f"{i+1} STEP 3-3: Parsing data")
+        for pcdbin in tqdm(os.listdir(os.path.join(DATA_path, f"{sequence_set}/pcdbin"))):
             file_number = int(pcdbin.split('.')[0])
             if file_number % 25 == 0:
                 input_file = os.path.join(DATA_path, f'{sequence_set}/pcdbin/{pcdbin}')
