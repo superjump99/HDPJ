@@ -112,7 +112,10 @@ if __name__ == '__main__':
                 remove_files(os.path.join(data_sequence_path, 'pointclouds'))
                 rename_files(os.path.join(data_sequence_path, 'pointclouds'))
             else:
-                continue
+                if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
+                    shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
+                else:
+                    continue
 
         # STEP 3-3. Parsing data
         for pcdbin in os.listdir(os.path.join(RAW_PCD_path, sequence_set)):
