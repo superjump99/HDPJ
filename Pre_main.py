@@ -7,7 +7,7 @@ from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
     drive = 'D:/HDC/'
-    os.chdir(drive)
+    print(os.getcwd())
     bucket_name = 'coop-selectstar-7000527-241231/'
     ''' :parameter
         step
@@ -32,10 +32,14 @@ if __name__ == '__main__':
 
     # STEP 1: Set base file
     base_path = os.path.join(f'{os.getcwd()}/{bucket_name}/{step}/{sensor}/{space}/')
+    print(base_path)
+
     if not os.path.exists(base_path): os.makedirs(base_path)
     if os.listdir(base_path): middle_folder_name = os.listdir(base_path)[0]
 
     middle_folder = os.path.join(f'{base_path}/{middle_folder_name}')
+    print(middle_folder)
+
     if not os.path.exists(f'{middle_folder}'): os.makedirs(middle_folder)
     if not os.path.exists(f'{middle_folder}/LDR_GT_Point/'): os.makedirs(f'{middle_folder}/LDR_GT_Point/')
     if not os.path.exists(f'{middle_folder}/LDR_GT_Property/'): os.makedirs(f'{middle_folder}/LDR_GT_Property/')
@@ -52,21 +56,22 @@ if __name__ == '__main__':
     # STEP 2-1: Copy Raw PCD
     print("Step 2-1. Copy Raw PCD")
     for i, sequence_set in enumerate(os.listdir(RAW_PCD_path)):
+        print(i, sequence_set)
         try:
             sequence_pcd_path = os.path.join(DATA_path, f'{sequence_set[12:]}/pcdbin')
             if not os.path.exists(os.path.join(DATA_path, f'{sequence_set[12:]}/pointclouds/')):
                 source_folder = f"{RAW_PCD_path}/{sequence_set}/"
                 target_folder = f"{sequence_pcd_path}/"
                 shutil.copytree(source_folder, target_folder)
-                print(f"{i + 1} [PCD copy completed]", sequence_set[12:])
-
+                print(f"[PCD copy completed]", sequence_set[12:])
 
         except FileExistsError:
-            print(f"{i + 1} [PCD copy already completed]", sequence_set[12:])
-        break
+            print(f"[PCD copy already completed]", sequence_set[12:])
+
     # STEP 2-2: Copy Raw Images
     print("Step 2-2. Copy Raw Image")
     for i, sequence_set in enumerate(os.listdir(RAW_Image_path)):
+        print(i, sequence_set)
         try:
             sequence_image_path = os.path.join(DATA_path, f'{sequence_set[14:]}/images')
             if not os.path.exists(sequence_image_path):
@@ -81,22 +86,23 @@ if __name__ == '__main__':
                 source_folder = f"{RAW_Image_path}/{sequence_set}/ImageFR"
                 target_folder = f"{sequence_image_path}/CAM_FRONT_RIGHT/"
                 shutil.copytree(source_folder, target_folder)
-                print(f"{i + 1} [Image copy completed]", sequence_set[12:])
+                print(f"[Image copy completed]", sequence_set[12:])
 
         except FileExistsError:
-            print(f"{i + 1} [Image copy already completed]", sequence_set[12:])
-        break
+            print(f"[Image copy already completed]", sequence_set[12:])
+
     # STEP 3. Preprocessing
     print("STEP 3. Preprocessing")
     for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
+        print(i, sequence_set)
         data_sequence_path = os.path.join(f'{DATA_path}', sequence_set)
 
-        print(f"{i + 1} [Check]: {sequence_set}")
         if not os.path.exists(os.path.join(DATA_path, f'{sequence_set}/annotations')):
             os.makedirs(os.path.join(DATA_path, f'{sequence_set}/annotations'))
 
         # STEP 3-1: Check older data: Remove and rename Images files
-        print(f"{i + 1} STEP 3-1: Check older data: Remove and rename Images files")
+        print(f"STEP 3-1: Check Image data: Remove and rename Images files")
+        # TODO : image 처리가 잘못된게 있다면 에러 발생하게
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/images')):
             if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/images/CAM_FRONT'))[0] == '000000.jpg':
                 remove_files(os.path.join(data_sequence_path, 'images/CAM_FRONT/'))
@@ -111,7 +117,8 @@ if __name__ == '__main__':
                 pass
 
         # STEP 3-2: Check older data: Remove and rename PCD files
-        print(f"{i + 1} STEP 3-2: Check older data: Remove and rename PCD files")
+        print(f"STEP 3-2: Check PCD data: Remove and rename PCD files")
+        # TODO : PCD 처리가 잘못된게 있다면 에러 발생하게
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pointclouds')):
             if not os.listdir(os.path.join(DATA_path, f'{sequence_set}/pointclouds'))[0] == '000000.pcd':
                 remove_files(os.path.join(data_sequence_path, 'pointclouds'))
@@ -150,7 +157,7 @@ if __name__ == '__main__':
         # STEP 3-5: Remove pcdbin folder
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
             shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
-        break
+
         # STEP 5. mk zip
         # shutil.make_archive(f"{DATA_path}/{sequence_set}",
         #                     'zip', root_dir=f"{DATA_path}/{sequence_set}")
