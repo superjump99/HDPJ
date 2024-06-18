@@ -44,10 +44,11 @@ def pcdbin_parser(input_file_path):
 def pre_process(df):
     # ROI 관련 범위 종방향 0 < x < 120m, 횡방향 -50 < y < 50m
     # 잔상으로 판별되는 layer 값 56~63 제거
-    # df = df[(df['x_veh'] < 130) % (df[df['y_veh'] < 60]) & df[df['y_veh'] > -60] & (df['layer'] < 56)]
+    # %(df[df['y_veh'] < 60]) & df[df['y_veh'] > -60] & (df['layer'] < 56)]
+    df = df[(df['x_veh'] < 130)]
     df = df[df['y_veh'] < 60]
-    df = df[df['z_veh'] > -60]
-    df = df[df['layer'] < 56]
+    df = df[df['y_veh'] > -60]
+    # df = df[df['layer'] < 56]
     df.reset_index(drop=True, inplace=True)
     return df
 
