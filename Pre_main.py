@@ -58,10 +58,12 @@ if __name__ == '__main__':
                 source_folder = f"{RAW_PCD_path}/{sequence_set}/"
                 target_folder = f"{sequence_pcd_path}/"
                 shutil.copytree(source_folder, target_folder)
+                print(f"{i + 1} [PCD copy completed]", sequence_set[12:])
+
 
         except FileExistsError:
             print(f"{i + 1} [PCD copy already completed]", sequence_set[12:])
-
+        break
     # STEP 2-2: Copy Raw Images
     print("Step 2-2. Copy Raw Image")
     for i, sequence_set in enumerate(os.listdir(RAW_Image_path)):
@@ -79,10 +81,11 @@ if __name__ == '__main__':
                 source_folder = f"{RAW_Image_path}/{sequence_set}/ImageFR"
                 target_folder = f"{sequence_image_path}/CAM_FRONT_RIGHT/"
                 shutil.copytree(source_folder, target_folder)
+                print(f"{i + 1} [Image copy completed]", sequence_set[12:])
 
         except FileExistsError:
             print(f"{i + 1} [Image copy already completed]", sequence_set[12:])
-
+        break
     # STEP 3. Preprocessing
     print("STEP 3. Preprocessing")
     for i, sequence_set in enumerate(os.listdir(f"{DATA_path}")):
@@ -147,6 +150,7 @@ if __name__ == '__main__':
         # STEP 3-5: Remove pcdbin folder
         if os.path.exists(os.path.join(DATA_path, f'{sequence_set}/pcdbin')):
             shutil.rmtree(os.path.join(DATA_path, f'{sequence_set}/pcdbin'))
+        break
         # STEP 5. mk zip
         # shutil.make_archive(f"{DATA_path}/{sequence_set}",
         #                     'zip', root_dir=f"{DATA_path}/{sequence_set}")
