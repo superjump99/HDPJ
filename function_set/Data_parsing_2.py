@@ -1,8 +1,7 @@
 import os
 import pandas as pd
 import struct
-import numpy as np
-from tqdm import tqdm
+
 
 # TODO 데이터 파싱
 def pcdbin_parser(input_file_path):
@@ -24,7 +23,7 @@ def pcdbin_parser(input_file_path):
     data = []
 
     with open(input_file_path, 'rb') as INPUT_FILE:
-        for _ in tqdm(range(num_records), desc="Parsing binary file"):
+        for _ in range(num_records):
             record = INPUT_FILE.read(record_size)
             parsed_record = struct.unpack("16f 2H 3L", record)
             data.append(parsed_record)
@@ -60,8 +59,11 @@ def pcdbin_to_pcd(pre_processing_done_df, output_file_path):
     with open(output_file_path, 'w') as output_file:
         output_file.write('\n'.join(header_lines) + '\n')
 
-    # numpy를 사용하여 더 빠르게 파일에 쓰기
-    np.savetxt(output_file_path, table.values, fmt='%f', delimiter=' ', header='', comments='', newline='\n', append=True)
+    # 데이터를 문자열로 변환한 후 한 번에 파일에 쓰기
+    data_string = '\n'.join(' '.join(map(str, row)) for row in table.values)
+
+    with open(output_file_path, 'a') as output_file:
+        output_file.write(data_string + '\n')
 
 # 테스트
 if __name__ == "__main__":
