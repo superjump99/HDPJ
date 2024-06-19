@@ -6,10 +6,10 @@ from function_set.Remove_unnecessary_file import remove_files, rename_files
 from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
-    # drive = 'C:/Users/pc/Desktop'
-    # os.chdir(drive)
+    drive = 'C:/Users/pc/Desktop'
+    os.chdir(drive)
     print(os.getcwd())
-    # bucket_name = '1-coop-selectstar-7000527-241231/'
+    bucket_name = '1-coop-selectstar-7000527-241231/'
     ''' :parameter
         step
             :param  
@@ -85,10 +85,10 @@ if __name__ == '__main__':
                 source_folder = f"{RAW_Image_path}/{sequence_set}/ImageFR"
                 target_folder = f"{sequence_image_path}/CAM_FRONT_RIGHT/"
                 shutil.copytree(source_folder, target_folder)
-                print(f"{i} [Image copy completed]", sequence_set[12:])
+                print(f"{i} [Image copy completed]", sequence_set[14:])
 
         except FileExistsError:
-            print(f"{i} [Image copy already completed]", sequence_set[12:])
+            print(f"{i} [Image copy already completed]", sequence_set[14:])
 
     # STEP 3. Preprocessing
     print("== STEP 3. Preprocessing ")
