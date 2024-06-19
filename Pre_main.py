@@ -3,7 +3,7 @@ import shutil
 from tqdm import tqdm
 
 from function_set.Remove_unnecessary_file import remove_files, rename_files
-from function_set.Data_parsing import pcdbin_parser, pcdbin_to_pcd
+from function_set.Data_parsing_2 import pcdbin_parser, pcdbin_to_pcd
 
 if __name__ == '__main__':
     drive = 'C:/Users/pc/Desktop'
