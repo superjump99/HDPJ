@@ -26,8 +26,8 @@ if __name__ == '__main__':
     LDR_RAW_Image = os.path.join(raw_data_path, "LDR_RAW_Image")
 
     for pcd_folder in os.listdir(f'{LDR_Raw_PCD}'):
-        os.makedirs(os.path.join(save_data_path, f"{pcd_folder}/annotations"), exist_ok=True)
         sequence_set = pcd_folder[12:]
+        os.makedirs(os.path.join(save_data_path, f"{sequence_set}/annotations"), exist_ok=True)
         print(sequence_set)
 
         # STEP 2. Extract raw pcdbin
