@@ -1,48 +1,26 @@
 import os
 
-def remove_files(folder_path):
+def remove_files(folder_path, file_type):
     for filename in os.listdir(folder_path):
-        if filename.endswith('.pcd'):
+        if filename.endswith(file_type):
             try:
-                file_number = int(filename.split('.')[0])
-                if file_number % 25 != 0:
-                    os.remove(os.path.join(folder_path, filename))
+                os.remove(os.path.join(folder_path, filename))
             except ValueError:
-                continue    # file names that can't be converted to numbers are ignored
-        if filename.endswith('.jpg'):
-            try:
-                file_number = int(filename.split('.')[0])
-                if file_number % 25 != 0:
-                    os.remove(os.path.join(folder_path, filename))
-            except ValueError:
-                continue  # file names that can't be converted to numbers are ignored
+                continue
     return
 
-def rename_files(folder_path):
-    # 입력 폴더에서 파일 목록 가져오기
+def renumbering_files(folder_path, file_type):
     file_list = os.listdir(folder_path)
 
-    # 출력 폴더가 없으면 생성
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-
-    # 파일 이름 변경 및 저장
     for i, old_name in enumerate(file_list):
         if old_name == 0:
             return
 
-        if old_name.endswith('.pcd'):
-            new_name = f"{i:06d}.pcd"
+        if old_name.endswith(file_type):
+            new_name = f"{i:06d}{file_type}"
 
             old_path = os.path.join(folder_path, old_name)
             new_path = os.path.join(folder_path, new_name)
 
             os.rename(old_path, new_path)
-
-        elif old_name.endswith('jpg'):
-            new_name = f"{i:06d}.jpg"
-
-            old_path = os.path.join(folder_path, old_name)
-            new_path = os.path.join(folder_path, new_name)
-
-            os.rename(old_path, new_path)
+    return
