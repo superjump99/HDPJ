@@ -56,4 +56,5 @@ if __name__ == '__main__':
         # STEP 5: Remove and Rename current data PCD files
         remove_files(pointclouds_folder, '.pcdbin')
         renumbering_files(pointclouds_folder, '.pcd')
-        shutil.make_archive(f"{save_data_path}/{sequence_set}", 'zip', f"{save_data_path}")
+        shutil.make_archive(f"{save_data_path}/{sequence_set}", 'zip',
+                            f"{save_data_path}/{sequence_set}")
