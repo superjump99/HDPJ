@@ -21,7 +21,8 @@ def process_json_file(json_file, base_path, field, xlsx_path):
     save_truncation_df_to_excel(truncation_df, xlsx_path, json_file[:6])
 
 def main():
-    os.chdir("C:/Users/pc/hyundai/input/HYUNDAI")
+    tool_path = 'c:/Users/pc/Desktop/3D-tool/input/HYUNDAI/'
+    os.chdir(tool_path)
     dataset = os.listdir(os.getcwd())[0]
     print(dataset)
 
