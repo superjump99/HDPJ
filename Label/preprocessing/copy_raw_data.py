@@ -1,6 +1,5 @@
-import os
 import shutil
-from function_set.remove_unnecessary_file import *
+
 
 def raw_pcd_processing(source_path, folder_name, target_path):
     try:

@@ -1,7 +1,8 @@
 import numpy as np
 import os
 import pandas as pd
-from function_set import Post_TRUNCATION as TRUNCATION
+from Label.postprocessing import Post_TRUNCATION as TRUNCATION
+
 
 def save_truncation_df_to_excel(truncation_df, xlsx_path, sheet_name):
     if not os.path.exists(xlsx_path):

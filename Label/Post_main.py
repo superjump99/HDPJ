@@ -2,9 +2,8 @@ import numpy as np
 import json
 import pandas as pd
 import os
-from datetime import date
-from function_set import Post_BOX as BOX, Post_TRUNCATION as TRUNCATION
-from function_set import Post_PROPERTY as PROPERTY
+from Label.postprocessing import Post_PROPERTY as PROPERTY
+from Label.postprocessing import Post_BOX as BOX, Post_TRUNCATION as TRUNCATION
 
 if __name__ == '__main__':
     HDC_path = os.getcwd()

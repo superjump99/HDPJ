@@ -1,7 +1,4 @@
 from tqdm import tqdm
-from function_set.copy_raw_data import *
-from function_set.Data_parsing_2 import *
-from function_set.remove_unnecessary_file import *
 
 if __name__ == '__main__':
     EHD = "E:/HDC/"
