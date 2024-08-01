@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # middle_folder_name = os.listdir(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/')[0]
     # base_path = os.path.join(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/{middle_folder_name}')
     # DATA_path = os.path.join(base_path, 'DATA')
-    tool_path = 'c:/Users/pc/hyundai/input/HYUNDAI/'
+    tool_path = 'c:/Users/pc/Desktop/3D-tool/input/HYUNDAI/'
     os.chdir(tool_path)
 
     # 저장 경로 탐색
