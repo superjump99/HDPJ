@@ -1,7 +1,6 @@
-from Label.preprocessing.copy_raw_data import *
-from Label.preprocessing.data_parsing_2 import *
-from Label.preprocessing.remove_unnecessary_file import *
-from Label.preprocessing.copy_property import *
+import Label.preprocessing
+import os
+import shutil
 from tqdm import tqdm
 
 if __name__ == '__main__':
@@ -35,14 +34,14 @@ if __name__ == '__main__':
         # STEP 2. Extract raw pcdbin
         raw_pcd_folder = os.path.join(LDR_Raw_PCD, pcd_folder)
         pointclouds_folder = os.path.join(save_data_path, f"{sequence_set}/pointclouds")
-        raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder)
+        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder)
 
         # STEP 3. Extract raw image
         raw_image_set = f"LDR_Raw_Image-{sequence_set}"
         for image_folder in os.listdir(f'{LDR_RAW_Image}'):
             if image_folder == raw_image_set:
                 raw_image_folder = os.path.join(LDR_RAW_Image, image_folder)
-                raw_image_processing(raw_image_folder, sequence_set, save_data_path)
+                Label.preprocessing.raw_image_processing(raw_image_folder, sequence_set, save_data_path)
 
         # STEP 4. Parsing
         for pcdbin in tqdm(os.listdir(pointclouds_folder)):
@@ -52,15 +51,15 @@ if __name__ == '__main__':
                 input_file = os.path.join(pointclouds_folder, pcdbin)
                 output_file = os.path.join(pointclouds_folder, f"{os.path.splitext(pcdbin)[0]}.pcd")
 
-                pre_processing_done_df = pcdbin_parser(input_file)
-                pcdbin_to_pcd(pre_processing_done_df, output_file)
+                pre_processing_done_df = Label.preprocessing.pcdbin_parser(input_file)
+                Label.preprocessing.pcdbin_to_pcd(pre_processing_done_df, output_file)
 
         # STEP 5. Remove pcdbin files and Rename PCD files
-        remove_files(pointclouds_folder, '.pcdbin')
-        renumbering_files(pointclouds_folder, '.pcd')
+        Label.preprocessing.remove_files(pointclouds_folder, '.pcdbin')
+        Label.preprocessing.renumbering_files(pointclouds_folder, '.pcd')
 
         # STEP 6. copy property
-        copy_property(f"{save_data_path}/{sequence_set}")
+        Label.preprocessing.copy_property(f"{save_data_path}/{sequence_set}")
 
         # STEP 7. mk zip
         shutil.make_archive(f"{save_data_path}/{sequence_set}", 'zip',
