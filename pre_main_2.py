@@ -1,4 +1,4 @@
-import Label.preprocessing
+import Label
 import os
 import shutil
 from tqdm import tqdm
