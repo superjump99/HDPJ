@@ -1,7 +1,7 @@
 from Label.preprocessing.copy_raw_data import *
 from Label.preprocessing.data_parsing_2 import *
 from Label.preprocessing.remove_unnecessary_file import *
-from Label.preprocessing.property import *
+from Label.preprocessing.copy_property import *
 from tqdm import tqdm
 
 if __name__ == '__main__':
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         renumbering_files(pointclouds_folder, '.pcd')
 
         # STEP 6. copy property
-        copy_files_property(f"{save_data_path}/{sequence_set}")
+        copy_property(f"{save_data_path}/{sequence_set}")
 
         # STEP 7. mk zip
         shutil.make_archive(f"{save_data_path}/{sequence_set}", 'zip',
