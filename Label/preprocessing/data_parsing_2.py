@@ -3,7 +3,7 @@ import pandas as pd
 import struct
 
 
-# TODO 데이터 파싱
+# 데이터 파싱
 def pcdbin_parser(input_file_path):
     field = ["x_veh", "y_veh", "z_veh",
              "range_veh", "azi_veh", "ele_veh",
@@ -32,7 +32,7 @@ def pcdbin_parser(input_file_path):
     pre_processing_done_df = pre_process(parsing_df)
     return pre_processing_done_df
 
-# TODO Preprocessing
+# Preprocessing
 def pre_process(df):
     # ROI 관련 범위 종방향 0 < x < 120m, 횡방향 -50 < y < 50m
     # 잔상으로 판별되는 layer 값 56~63 제거
