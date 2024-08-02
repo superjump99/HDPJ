@@ -1,7 +1,11 @@
+from Label.preprocessing.copy_raw_data import *
+from Label.preprocessing.data_parsing_2 import *
+from Label.preprocessing.remove_unnecessary_file import *
+from Label.preprocessing.property import *
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    EHD = "E:/HDC/"
+    EHD = "D:/HDC/"
 
     save_location = "C:/Users/pc/Desktop"
     os.chdir(save_location)
@@ -10,7 +14,7 @@ if __name__ == '__main__':
 
     step = "01_Label/"
     sensor = "02_PANDAR_MV/"
-    space = "02_ParkingLot"
+    space = "03_Urban"
 
     # STEP 1: Set base file
     middle_folder_name = os.listdir(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/')[0]
@@ -22,6 +26,7 @@ if __name__ == '__main__':
     LDR_Raw_PCD = os.path.join(raw_data_path, "LDR_RAW_PCD")
     LDR_RAW_Image = os.path.join(raw_data_path, "LDR_RAW_Image")
 
+    # 폴더 별 데이터 파싱 진행
     for pcd_folder in os.listdir(f'{LDR_Raw_PCD}'):
         sequence_set = pcd_folder[12:]
         os.makedirs(os.path.join(save_data_path, f"{sequence_set}/annotations"), exist_ok=True)
@@ -50,8 +55,13 @@ if __name__ == '__main__':
                 pre_processing_done_df = pcdbin_parser(input_file)
                 pcdbin_to_pcd(pre_processing_done_df, output_file)
 
-        # STEP 5: Remove and Rename current data PCD files
+        # STEP 5. Remove pcdbin files and Rename PCD files
         remove_files(pointclouds_folder, '.pcdbin')
         renumbering_files(pointclouds_folder, '.pcd')
+
+        # STEP 6. copy property
+        copy_files_property(f"{save_data_path}/{sequence_set}")
+
+        # STEP 7. mk zip
         shutil.make_archive(f"{save_data_path}/{sequence_set}", 'zip',
                             f"{save_data_path}/{sequence_set}")
