@@ -28,6 +28,12 @@ if __name__ == '__main__':
     # 폴더 별 데이터 파싱 진행
     for pcd_folder in os.listdir(f'{LDR_Raw_PCD}'):
         sequence_set = pcd_folder[12:]
+
+        zip_file_path = os.path.join(save_data_path, f"{sequence_set}.zip")
+        if os.path.exists(zip_file_path):
+            print(f"{zip_file_path} already exists. Skipping...")
+            continue
+
         os.makedirs(os.path.join(save_data_path, f"{sequence_set}/annotations"), exist_ok=True)
         print(sequence_set)
 
