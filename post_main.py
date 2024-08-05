@@ -2,8 +2,7 @@ import numpy as np
 import json
 import pandas as pd
 import os
-from Label.postprocessing import Post_PROPERTY as PROPERTY
-from Label.postprocessing import Post_BOX as BOX, Post_TRUNCATION as TRUNCATION
+import Label.postprocessing
 
 if __name__ == '__main__':
     HDC_path = os.getcwd()
@@ -78,9 +77,9 @@ if __name__ == '__main__':
 
             # STEP 3. Data frame to json
             row = data.loc[0]
-            seq_data = PROPERTY.sequence_metadata(row, version)
-            scene_data = PROPERTY.scene_curation(row)
-            output_json = PROPERTY.convert_to_new_format(seq_data, scene_data)
+            seq_data = Label.postprocessing.PROPERTY.sequence_metadata(row, version)
+            scene_data = Label.postprocessing.PROPERTY.scene_curation(row)
+            output_json = Label.postprocessing.PROPERTY.convert_to_new_format(seq_data, scene_data)
 
             # STEP 4. Save json file
             output_file_path = os.path.join(f"{base_path}/LDR_GT_Property/")
@@ -110,14 +109,14 @@ if __name__ == '__main__':
                 if filenum % 2 == 1:
                     n += 1
 
-                    df = TRUNCATION.load_json_annotations(
+                    df = Label.postprocessing.TRUNCATION.load_json_annotations(
                         os.path.join(f"{tool_path}/{sequence_set}/annotations", annotation))
-                    truncation_df = TRUNCATION.truncation(field, df)
+                    truncation_df = Label.postprocessing.TRUNCATION.truncation(field, df)
 
                     # 후처리 함수
-                    frame_metadata = BOX.change_frame_metadata(n, filenum, log_start_time)
-                    object_list = BOX.change_object_list(truncation_df)
-                    frame = BOX.frames(object_list, frame_metadata)
+                    frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, filenum, log_start_time)
+                    object_list = Label.postprocessing.BOX.change_object_list(truncation_df)
+                    frame = Label.postprocessing.BOX.frames(object_list, frame_metadata)
                     output_json['FRAME_LIST'].append(frame)
 
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
