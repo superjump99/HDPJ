@@ -1,8 +1,23 @@
-import Label
+import Label.preprocessing
 import os
 import shutil
 from tqdm import tqdm
 
+''' :parameter
+    step
+        :param  
+        '01_Label/'
+        '02_Inspection/'
+    sensor
+        :param
+        '01_IRIS_JX013/'
+        '02_PANDAR_MV/'
+    space
+        :param
+        '01_Highway/'
+        '02_ParkingLot/'
+        '03_Urban/'
+'''
 if __name__ == '__main__':
     EHD = "D:/HDC/"
 
