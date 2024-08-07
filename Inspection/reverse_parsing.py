@@ -1,98 +1,87 @@
-import json
+import Label.preprocessing
 import os
+import process_data
+from tqdm import tqdm
+
+''' :parameter
+    step
+        :param  
+        '01_Label/'
+        '02_Inspection/'
+    sensor
+        :param
+        '01_IRIS_JX013/'
+        '02_PANDAR_MV/'
+    space
+        :param
+        '01_Highway/'
+        '02_ParkingLot/'
+        '03_Urban/'
+'''
 
 
 if __name__ == '__main__':
-    LDR_GT_Box = 'LDR_GT_BOX'
-    file_name = ''
 
-    version = '4.1.3'
-    s3_path = 'S3_hyundai'
+    step = "02_Inspection/"
+    sensor = "02_PANDAR_MV/"
+    space = "01_Highway/"
 
-    HDC_path = os.getcwd()
-    version = '4.1.3'
-    bucket_name = 'coop-selectstar-7000527-241231/'
-    task = '02_Inspection/'
+    EHD = "E:/HDC/"
+    save_location = "C:/Users/pc/Desktop"
+    os.chdir(save_location)
+    print(os.getcwd())
+    bucket_name = "coop-selectstar-7000527-241231/"
 
-    ''' :parameter
-        step
-            :param  
-            '01_Label/'
-            '02_Inspection/'
-        sensor
-            :param
-            '01_IRIS_JX013/'
-            '02_PANDAR_MV/'
-        space
-            :param
-            '01_Highway/'
-            '02_ParkingLot/'
-            '03_Urban/'
-    '''
 
-    sensor = '01_IRIS_JX013'
-    space = '01_Highway'
 
-    space_dir = os.path.join(f"{os.getcwd()}/{bucket_name}/{task}/{space}")
-    dataset_list = os.listdir(space_dir)
-    print(dataset_list)
-    # exit()
-    # dataset_list = os.listdir(f"{base_path}/{given_data_path}/{space}/{dataset}/")
-    for sequence_set in dataset_list:
-        if sequence_set.endswith(".json"):
-            print(sequence_set)
-            # box_json = os.listdir(f"{space_dir}/{given_data_path}/{space}/{dataset}/{sequence_set}/LDR_GT_Box/")
-            # json_file = os.path.join(f"{base_path}/{given_data_path}/{space}/{dataset}/{sequence_set}/LDR_GT_Box/"+ box_json[0])
-            # print(box_json)
-            json_file = os.path.join(space_dir, sequence_set)
-            print(json_file)
-            # print(json_file)
-            # if not os.path.exists(f"{base_path}/{parsing_done_path}/{space}/{dataset}/{sequence_set}"):
-                # print(f"{base_path}/{parsing_done_path}/{space}/{dataset}/{sequence_set}")
+    # STEP 1: Set base file
+    middle_folder_name = os.listdir(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/')[0]
+    raw_data_path = os.path.join(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/', middle_folder_name)
+    save_data_path = os.path.join(f'{save_location}/{bucket_name}/{step}/{sensor}/{space}/', middle_folder_name)
+    print(raw_data_path)
 
-            with open(json_file, 'r') as f:
-                data = json.load(f)
+    os.makedirs(save_data_path, exist_ok=True)
 
-        # exit()
-                for i in range(len(data["FRAME_LIST"])):
-                    output = {
-                        "name": f"{i:06d}",
-                        "timestamp": 0,
-                        "index": i,
-                        "labels": []
-                    }
-                    input_objs = [sublist for sublist in data["FRAME_LIST"][i]['OBJECT_LIST']]
-                    for idx, item in enumerate(input_objs):
-                        label = {
-                            "id": idx,
-                            "category": item["CLASS"],
-                            "occlusion": str(item["OCCLUSION"]),
-                            "box3d": {
-                                "dimension": {
-                                    "width": item["DIMENSION"][1],
-                                    "length": item["DIMENSION"][0],
-                                    "height": item["DIMENSION"][2]
-                                },
-                                "location": {
-                                    "x": item["LOCATION"][0],
-                                    "y": item["LOCATION"][1],
-                                    "z": -item["LOCATION"][2]  # Assuming this needs to be positive
-                                },
-                                "orientation": {
-                                    "rotationYaw": item["HEADING"],
-                                    "rotationPitch": 0,
-                                    "rotationRoll": 0
-                                }
-                            }
-                        }
-                        output["labels"].append(label)
-                    print(output)
-                    output_path = os.path.join(f"{space_dir}/{sequence_set[:-5]}/annotations/", f"{i:06d}.json")
-                    os.makedirs(f"{space_dir}/{sequence_set[:-5]}/annotations/", exist_ok=True)
-                    with open(output_path, 'w') as f:
-                        json.dump(output, f, indent=2)
-    #     exit()
-    # # for json in box_json:
-    # #     print(folder)
-    # exit()
-    # # if os.path.exists(f"{base_path}/{parsing_done_path}/{space}/{dataset}):
+    LDR_Raw_PCD = os.path.join(raw_data_path, "LDR_RAW_PCD")
+    LDR_RAW_Image = os.path.join(raw_data_path, "LDR_RAW_Image")
+    LDR_GT_BOX = os.path.join(raw_data_path, "LDR_GT_BOX")
+
+    # 폴더 별 데이터 파싱 진행
+    for pcd_folder in os.listdir(f'{LDR_Raw_PCD}'):
+        sequence_set = pcd_folder[12:]
+        print(sequence_set)
+
+        # 검수할 json 파일 annotations 폴더로 변환
+        LDR_GT_BOX = os.path.join(raw_data_path, "LDR_GT_BOX")
+        annotation_folder = os.path.join(save_data_path, f"{sequence_set}/annotations")
+        os.makedirs(annotation_folder, exist_ok=True)
+        parsing_num = process_data.process_dataset(LDR_GT_BOX, sequence_set, annotation_folder)
+        file = open('parsing_num.txt', 'w')
+        w = file.write(f'{parsing_num[0]} ~ {parsing_num[-1]}')
+
+        # STEP 2. Extract raw pcdbin
+        raw_pcd_folder = os.path.join(LDR_Raw_PCD, pcd_folder)
+        pointclouds_folder = os.path.join(save_data_path, f"{sequence_set}/pointclouds")
+        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder, target_file = parsing_num)
+
+        # STEP 3. Extract raw image
+        raw_image_set = f"LDR_Raw_Image-{sequence_set}"
+        for image_folder in os.listdir(f'{LDR_RAW_Image}'):
+            if image_folder == raw_image_set:
+                raw_image_folder = os.path.join(LDR_RAW_Image, image_folder)
+                Label.preprocessing.raw_image_processing(raw_image_folder, sequence_set, save_data_path, target_file= parsing_num)
+
+        # STEP 4. Parsing
+        for pcdbin in tqdm(os.listdir(pointclouds_folder)):
+            file_number = int(pcdbin.split('.')[0])
+
+            if file_number in parsing_num:
+                input_file = os.path.join(pointclouds_folder, pcdbin)
+                output_file = os.path.join(pointclouds_folder, f"{os.path.splitext(pcdbin)[0]}.pcd")
+
+                pre_processing_done_df = Label.preprocessing.pcdbin_parser(input_file)
+                Label.preprocessing.pcdbin_to_pcd(pre_processing_done_df, output_file)
+
+        # STEP 5. Remove pcdbin files and Rename PCD files
+        Label.preprocessing.remove_files(pointclouds_folder, '.pcdbin')
+        Label.preprocessing.renumbering_files(pointclouds_folder, '.pcd')
