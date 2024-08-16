@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     step = "02_Inspection/"
     sensor = "01_IRIS_JX013/"
-    space = "03_Urban/"
+    space = "01_Highway/"
 
     EHD = "E:/HDC/"
     save_location = "C:/Users/pc/Desktop"
@@ -34,9 +34,14 @@ if __name__ == '__main__':
     bucket_name = "coop-selectstar-7000527-241231/"
 
     # STEP 1: Set base file
-    middle_folder_name = os.listdir(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/')[0]
-    raw_data_path = os.path.join(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/', middle_folder_name)
-    save_data_path = os.path.join(f'{save_location}/{bucket_name}/{step}/{sensor}/{space}/', middle_folder_name)
+    try:
+        middle_folder_name = os.listdir(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/')[0]
+    except:
+        EHD = "D:/HDC/"
+    finally:
+        middle_folder_name = os.listdir(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/')[0]
+        raw_data_path = os.path.join(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/', middle_folder_name)
+        save_data_path = os.path.join(f'{save_location}/{bucket_name}/{step}/{sensor}/{space}/', middle_folder_name)
     print(raw_data_path)
 
     os.makedirs(save_data_path, exist_ok=True)
