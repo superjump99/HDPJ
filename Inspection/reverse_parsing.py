@@ -1,3 +1,4 @@
+import shutil
 import Label.preprocessing
 import os
 import process_data
@@ -23,16 +24,14 @@ from tqdm import tqdm
 if __name__ == '__main__':
 
     step = "02_Inspection/"
-    sensor = "02_PANDAR_MV/"
-    space = "01_Highway/"
+    sensor = "01_IRIS_JX013/"
+    space = "03_Urban/"
 
     EHD = "E:/HDC/"
     save_location = "C:/Users/pc/Desktop"
     os.chdir(save_location)
     print(os.getcwd())
     bucket_name = "coop-selectstar-7000527-241231/"
-
-
 
     # STEP 1: Set base file
     middle_folder_name = os.listdir(f'{EHD}/{bucket_name}/{step}/{sensor}/{space}/')[0]
@@ -56,7 +55,8 @@ if __name__ == '__main__':
         annotation_folder = os.path.join(save_data_path, f"{sequence_set}/annotations")
         os.makedirs(annotation_folder, exist_ok=True)
         parsing_num = process_data.process_dataset(LDR_GT_BOX, sequence_set, annotation_folder)
-        file = open('parsing_num.txt', 'w')
+
+        file = open(os.path.join(save_data_path, f"{sequence_set}/parsing_num.txt"), 'w')
         w = file.write(f'{parsing_num[0]} ~ {parsing_num[-1]}')
 
         # STEP 2. Extract raw pcdbin
@@ -85,3 +85,9 @@ if __name__ == '__main__':
         # STEP 5. Remove pcdbin files and Rename PCD files
         Label.preprocessing.remove_files(pointclouds_folder, '.pcdbin')
         Label.preprocessing.renumbering_files(pointclouds_folder, '.pcd')
+
+        # xlsx 파일 복사
+        root = f'{EHD}/{bucket_name}/{step}/LDR_INSPECTION-.xlsx'
+        target = os.path.join(save_data_path, f"{sequence_set}")
+        shutil.copy(root,target)
+        os.rename(os.path.join(target, "LDR_INSPECTION-.xlsx"), os.path.join(target, f"LDR_INSPECTION-{sequence_set}.xlsx"))
