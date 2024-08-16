@@ -5,7 +5,7 @@ import os
 import Label.postprocessing
 
 if __name__ == '__main__':
-    HDC_path = os.getcwd()
+    HDC_path = os.path.dirname(os.getcwd())
     version = '4.1.3'
     bucket_name = 'coop-selectstar-7000527-241231/'
     step = '01_Label/'
@@ -120,7 +120,7 @@ if __name__ == '__main__':
                     output_json['FRAME_LIST'].append(frame)
 
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
-            output_file_path = os.path.join(f"{base_path}/LDR_GT_Point/")
+            output_file_path = os.path.join(f"{base_path}/LDR_GT_Box/")
             if not os.path.exists(output_file_path): os.path.exists(output_file_path)
             save_path = os.path.join(output_file_path, box_json)
 
