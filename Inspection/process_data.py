@@ -22,6 +22,8 @@ def process_dataset(LDR_GT_BOX, sequence_set, save_path):
                 }
                 input_objs = [sublist for sublist in data["FRAME_LIST"][i]['OBJECT_LIST']]
                 for idx, item in enumerate(input_objs):
+                    if item["CLASS"] == "TUBULER_MARKER":
+                        item["CLASS"] = "TUBULAR_MARKER"
                     label = {
                         "id": idx,
                         "category": item["CLASS"],
@@ -35,7 +37,7 @@ def process_dataset(LDR_GT_BOX, sequence_set, save_path):
                             "location": {
                                 "x": item["LOCATION"][0],
                                 "y": item["LOCATION"][1],
-                                "z": -item["LOCATION"][2]  # Assuming this needs to be positive
+                                "z": item["LOCATION"][2]  # Assuming this needs to be positive
                             },
                             "orientation": {
                                 "rotationYaw": item["HEADING"],
@@ -45,7 +47,7 @@ def process_dataset(LDR_GT_BOX, sequence_set, save_path):
                         }
                     }
                     output["labels"].append(label)
-                print(output)
+                # print(output)
                 output_path = os.path.join(f"{save_path}", f"{i:06d}.json")
 
                 with open(output_path, 'w') as f:
