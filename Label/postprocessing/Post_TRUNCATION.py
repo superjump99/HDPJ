@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from shapely.geometry import Polygon
 
-def load_json_annotations(file_path):
+def  load_json_annotations(file_path):
     with open(file_path, 'r') as f:
         data = json.load(f)
     converted_data = [
@@ -26,10 +26,11 @@ def load_json_annotations(file_path):
     ]
     return pd.DataFrame(converted_data)
 
-def calculate_box_vertices(center_x, center_y, width, length, rotationYaw):
+def calculate_box_vertices(center_x, center_y, center_z ,width, length, height, rotationYaw):
     # 반 가로와 반 세로 길이
     half_width = width / 2.0
     half_length = length / 2.0
+    half_height = height / 2.0
 
     # 박스의 중심에서 각 꼭지점까지의 상대적 위치
     corners_relative = [
@@ -47,15 +48,28 @@ def calculate_box_vertices(center_x, center_y, width, length, rotationYaw):
         ) for x, y in corners_relative
     ]
 
-    return corners_rotated
+    # 3D 공간에서 각 꼭지점을 계산 (z 좌표 포함)
+    vertices = []
+    for x, y in corners_rotated:
+        # 상단 꼭지점 (높이가 더해진 경우)
+        # x,y = f"{x:.2f}", f"{y:.2f}"
+        vertices.append((x, y, center_z + half_height))
+        # 하단 꼭지점 (높이가 뺀 경우)
+        vertices.append((x, y, center_z - half_height))
 
-def truncation(field, df):
+    return vertices
+
+def truncation(df):
+    field = np.array([(-1, 0), (20, 50), (120, 50), (120, -50), (20, -50), (-1, 0)])
+
     plt.figure(figsize=(10, 8))
     plt.plot(field[:, 0], field[:, 1], '-o', label='Field Boundary')
     field_polygon = Polygon(field)
     truncation_list = []
+    box_vertices_list = []
     for idx, row in df.iterrows():
-        box_vertices = np.array(calculate_box_vertices(row['x'], row['y'], row['length'], row['width'], row['rotationYaw']))
+        box_vertices = np.array(calculate_box_vertices(row['x'], row['y'], row['z'], row['length'], row['width'], row['height'], row['rotationYaw']))
+        box_vertices_list.append(box_vertices)
         box_polygon = Polygon(box_vertices)
 
         plt.plot(box_vertices[:, 0], box_vertices[:, 1], '-s', label=f'Box {idx}')
@@ -72,17 +86,7 @@ def truncation(field, df):
         plt.close()
 
     df['truncation'] = truncation_list
-    return df
-
-    # plt.title('Field with Box')
-    # plt.xlabel('X')
-    # plt.ylabel('Y')
-    # plt.legend()
-    # plt.grid(True)
-    # plt.axis('equal')
-    # plt.show()
-
-
+    return df, box_vertices_list
 
 
 if __name__ == '__main__':
