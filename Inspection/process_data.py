@@ -2,7 +2,7 @@ import os
 import json
 
 
-def process_dataset(LDR_GT_BOX, sequence_set, save_path):
+def reverse_parsing(LDR_GT_BOX, sequence_set, save_path):
     parsing_num = []
     for boxjson in os.listdir(LDR_GT_BOX):
         if boxjson[11:-11] != sequence_set:

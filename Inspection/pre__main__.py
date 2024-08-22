@@ -59,7 +59,7 @@ if __name__ == '__main__':
         LDR_GT_BOX = os.path.join(raw_data_path, "LDR_GT_BOX")
         annotation_folder = os.path.join(save_data_path, f"{sequence_set}/annotations")
         os.makedirs(annotation_folder, exist_ok=True)
-        parsing_num = process_data.process_dataset(LDR_GT_BOX, sequence_set, annotation_folder)
+        parsing_num = process_data.reverse_parsing(LDR_GT_BOX, sequence_set, annotation_folder)
 
         file = open(os.path.join(save_data_path, f"{sequence_set}/parsing_num.txt"), 'w')
         w = file.write(f'{parsing_num[0]} ~ {parsing_num[-1]}')
