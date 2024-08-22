@@ -96,3 +96,7 @@ if __name__ == '__main__':
         target = os.path.join(save_data_path, f"{sequence_set}")
         shutil.copy(root,target)
         os.rename(os.path.join(target, "LDR_INSPECTION-.xlsx"), os.path.join(target, f"LDR_INSPECTION-{sequence_set}.xlsx"))
+
+        # STEP 7. mk zip
+        shutil.make_archive(f"{save_data_path}/{sequence_set}", 'zip',
+                            f"{save_data_path}/{sequence_set}")
