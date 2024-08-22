@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
                     df = Label.postprocessing.TRUNCATION.load_json_annotations(
                         os.path.join(f"{tool_path}/{sequence_set}/annotations", annotation))
-                    truncation_df = Label.postprocessing.TRUNCATION.truncation(field, df)
+                    truncation_df, box_vertices_list = Label.postprocessing.TRUNCATION.truncation(field, df)
 
                     # 후처리 함수
                     frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, filenum, log_start_time)
