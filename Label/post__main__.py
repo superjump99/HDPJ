@@ -30,10 +30,8 @@ if __name__ == '__main__':
     space = '01_Highway'
 
     # STEP 1: Set base file
-    # middle_folder_name = os.listdir(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/')[0]
-    # base_path = os.path.join(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/{middle_folder_name}')
-    # DATA_path = os.path.join(base_path, 'DATA')
-    tool_path = 'c:/Users/pc/Desktop/3D-tool/input/HYUNDAI/'
+
+    tool_path = 'c:/Users/82108/Desktop/3D-tool/input/HYUNDAI/'
     os.chdir(tool_path)
 
     # 저장 경로 탐색
@@ -56,6 +54,7 @@ if __name__ == '__main__':
                     space = '02_ParkingLot'
                 else:
                     space = '03_Urban'
+        os.makedirs(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/', exist_ok=True)
         middle_folder_name = os.listdir(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/')[0]
         base_path = os.path.join(f'{HDC_path}/{bucket_name}/{step}/{sensor}/{space}/{middle_folder_name}')
 
@@ -111,17 +110,17 @@ if __name__ == '__main__':
 
                     df = Label.postprocessing.TRUNCATION.load_json_annotations(
                         os.path.join(f"{tool_path}/{sequence_set}/annotations", annotation))
-                    truncation_df, box_vertices_list = Label.postprocessing.TRUNCATION.truncation(field, df)
+                    truncation_df, box_vertices_list = Label.postprocessing.TRUNCATION.truncation(df)
 
                     # 후처리 함수
-                    frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, filenum, log_start_time)
+                    frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, log_start_time)
                     object_list = Label.postprocessing.BOX.change_object_list(truncation_df)
                     frame = Label.postprocessing.BOX.frames(object_list, frame_metadata)
                     output_json['FRAME_LIST'].append(frame)
 
             # 파일명과 동일한 이름으로 변환된 JSON 파일 저장
             output_file_path = os.path.join(f"{base_path}/LDR_GT_Box/")
-            if not os.path.exists(output_file_path): os.path.exists(output_file_path)
+            os.makedirs(output_file_path, exist_ok=True)
             save_path = os.path.join(output_file_path, box_json)
 
             with open(save_path, 'w') as f:
