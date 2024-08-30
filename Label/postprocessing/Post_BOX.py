@@ -11,10 +11,9 @@ stage = stage_list[3]
 # print(stage)
 inspction_step = 0
 
-def change_frame_metadata(num,pcdnum,start_time):
+def change_frame_metadata(num,start_time):
     # TODO: FRAME_LIST 수정 필요
-    # print(start_time)
-    # print(type(start_time))
+
     year = int(start_time[:4])
     month = int(start_time[4:6])
     day = int(start_time[6:8])
@@ -22,12 +21,7 @@ def change_frame_metadata(num,pcdnum,start_time):
     minute = int(start_time[10:12])
     second = int(start_time[12:])
     start_time = datetime.datetime(year,month,day,hour,minute,second)
-    # print(datetime.timedelta(seconds = num*0.1))
-    # print(start_time)
 
-    # print(str(start_time + datetime.timedelta(seconds = num*0.1)))
-    # print(start_time)
-    # timestamp = start_time + datetime.timedelta(seconds=num * 0.1)
     frame_metadata = {
                     # TODO Fix NUMBER value
                     "NUMBER": num*50,
