@@ -95,7 +95,6 @@ if __name__ == '__main__':
         # TODO BOX
         # 생성된 폴더 확인 및 생성
         if not os.path.exists(f"{base_path}/LDR_GT_Point/{box_json}"):
-            field = np.array([(-1, 0), (20, 50), (120, 50), (120, -50), (20, -50), (-1, 0)])
 
             # 입력 폴더 내의 모든 JSON 파일 목록 가져오기
             annotation_json = [f for f in os.listdir(f"{tool_path}/{sequence_set}/annotations")
@@ -109,7 +108,7 @@ if __name__ == '__main__':
 
                     df = Label.postprocessing.TRUNCATION.load_json_annotations(
                         os.path.join(f"{tool_path}/{sequence_set}/annotations", annotation))
-                    truncation_df, box_vertices_list = Label.postprocessing.TRUNCATION.truncation(field, df)
+                    truncation_df, box_vertices_list = Label.postprocessing.TRUNCATION.truncation( df)
 
                     # 후처리 함수
                     frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, filenum, log_start_time)
