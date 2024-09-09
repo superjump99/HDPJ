@@ -59,7 +59,7 @@ if __name__ == '__main__':
         LDR_GT_BOX = os.path.join(raw_data_path, "LDR_GT_BOX")
         annotation_folder = os.path.join(save_data_path, f"{sequence_set}/annotations")
         os.makedirs(annotation_folder, exist_ok=True)
-        parsing_num = process_data.reverse_parsing(LDR_GT_BOX, sequence_set, annotation_folder)
+        parsing_num = reverse_process.reverse_parsing(LDR_GT_BOX, sequence_set, annotation_folder)
 
         file = open(os.path.join(save_data_path, f"{sequence_set}/parsing_num.txt"), 'w')
         w = file.write(f'{parsing_num[0]} ~ {parsing_num[-1]}')
@@ -67,14 +67,15 @@ if __name__ == '__main__':
         # STEP 2. Extract raw pcdbin
         raw_pcd_folder = os.path.join(LDR_Raw_PCD, pcd_folder)
         pointclouds_folder = os.path.join(save_data_path, f"{sequence_set}/pointclouds")
-        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder, target_file = parsing_num)
+        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, pointclouds_folder, target_file=parsing_num)
 
         # STEP 3. Extract raw image
         raw_image_set = f"LDR_Raw_Image-{sequence_set}"
         for image_folder in os.listdir(f'{LDR_RAW_Image}'):
             if image_folder == raw_image_set:
                 raw_image_folder = os.path.join(LDR_RAW_Image, image_folder)
-                Label.preprocessing.raw_image_processing(raw_image_folder, sequence_set, save_data_path, target_file= parsing_num)
+                Label.preprocessing.raw_image_processing(
+                    raw_image_folder, sequence_set, os.path.join(save_data_path, sequence_set), target_file=parsing_num)
 
         # STEP 4. Parsing
         for pcdbin in tqdm(os.listdir(pointclouds_folder)):

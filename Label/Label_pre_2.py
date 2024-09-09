@@ -55,14 +55,14 @@ if __name__ == '__main__':
         # STEP 2. Extract raw pcdbin
         raw_pcd_folder = os.path.join(LDR_Raw_PCD, pcd_folder)
         pointclouds_folder = os.path.join(save_data_path, f"{sequence_set}/pointclouds")
-        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder)
+        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder, None)
 
         # STEP 3. Extract raw image
         raw_image_set = f"LDR_Raw_Image-{sequence_set}"
         for image_folder in os.listdir(f'{LDR_RAW_Image}'):
             if image_folder == raw_image_set:
                 raw_image_folder = os.path.join(LDR_RAW_Image, image_folder)
-                Label.preprocessing.raw_image_processing(raw_image_folder, sequence_set, save_data_path)
+                Label.preprocessing.raw_image_processing(raw_image_folder, save_data_path, sequence_set, None )
 
         # STEP 4. Parsing
         for pcdbin in tqdm(os.listdir(pointclouds_folder)):
