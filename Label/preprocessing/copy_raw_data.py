@@ -1,6 +1,6 @@
 import shutil
 from Label.preprocessing.remove_unnecessary_file import *
-def raw_pcd_processing(source_path, folder_name, target_path, target_file):
+def raw_pcd_processing(source_path, target_path, target_file):
     try:
         extract_files(source_path, target_path, target_file)
         print(f"[PCD copy completed]")
@@ -9,7 +9,7 @@ def raw_pcd_processing(source_path, folder_name, target_path, target_file):
         print(f"[PCD copy already completed]")
     return
 
-def raw_image_processing(source_path, folder_name, target_path, target_file):
+def raw_image_processing(source_path, target_path, folder_name, target_file):
     try:
         for folder in os.listdir(source_path):
             if folder == 'ImageFC':
