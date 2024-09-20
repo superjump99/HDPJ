@@ -55,6 +55,11 @@ if __name__ == '__main__':
         sequence_set = pcd_folder[12:]
         print(sequence_set)
 
+        zip_file_path = os.path.join(save_data_path, f"{sequence_set}.zip")
+        if os.path.exists(zip_file_path):
+            print(f"{zip_file_path} already exists. Skipping...")
+            continue
+
         # 검수할 json 파일 annotations 폴더로 변환
         LDR_GT_BOX = os.path.join(raw_data_path, "LDR_GT_BOX")
         annotation_folder = os.path.join(save_data_path, f"{sequence_set}/annotations")
