@@ -24,6 +24,10 @@ def reverse_parsing(LDR_GT_BOX, sequence_set, save_path):
                 for idx, item in enumerate(input_objs):
                     if item["CLASS"] == "TUBULER_MARKER":
                         item["CLASS"] = "TUBULAR_MARKER"
+                        if item["CLASS"] == "DOOR":
+                            item["CLASS"] = "DOOR.SIDE"
+                        if item["CLASS"] == "PEDESTRIAN.KID.KID_STANDING":
+                            item["CLASS"] = "PEDESTRIAN.KID.STANDING"
                     label = {
                         "id": idx,
                         "category": item["CLASS"],
