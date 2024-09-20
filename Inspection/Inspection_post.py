@@ -77,13 +77,16 @@ def copy_and_rename_images(sequence_path, save_path, sequence):
                         if image.endswith('.JPG'):
                             image.replace('.JPG', '.jpg')
                         new_image_name = image.replace('-', '_')
+                        if '_' not in new_image_name:
+                            new_image_name = image.replace('.', '_1.')
                         parts = new_image_name.split('_')
                         number_part = parts[-2].zfill(6)
                         index_part = parts[-1]
                         new_image_name = f'LDR_INSPECTION-{sequence}_' + '_'.join(
                             parts[:-2]) + f'{number_part}_{index_part}'
                         os.rename(os.path.join(dest_path, image), os.path.join(dest_path, new_image_name))
-
+            else:
+                pass
             iel = image_error_list(os.listdir(dest_path))
             return iel
 def process_excel_files(sequence_path, save_path, start_frame):
@@ -125,12 +128,19 @@ def process_excel_files(sequence_path, save_path, start_frame):
                     _, miss_gt_box_vertices = Label.postprocessing.TRUNCATION.truncation(df_miss_gt)
 
                     for id_str in df_to_dict[filenum]:
-                        id_int = int(id_str)
-                        print(annotation, id_int)
-                        if id_int >= 0:
-                            necessary_vertex.append(box_vertices_list[id_int].tolist())
-                        else:
-                            necessary_vertex.append(miss_gt_box_vertices[-id_int - 1].tolist())
+                        print(id_str)
+                        try:
+                            id_int = int(id_str)
+                            print(annotation, id_int)
+                            if id_int >= 0:
+                                necessary_vertex.append(box_vertices_list[id_int].tolist())
+                            else:
+                                print(miss_gt_box_vertices)
+                                print(miss_gt_box_vertices[-id_int - 1].tolist())
+                                necessary_vertex.append(miss_gt_box_vertices[-id_int - 1].tolist())
+                        except:
+                            necessary_vertex.append('')
+                            continue
 
             df['ROI 8 points'] = necessary_vertex
 
@@ -198,5 +208,5 @@ if __name__ == '__main__':
         os.makedirs(save_path, exist_ok=True)
 
         # Process the sequence
-        process_sequence(data_path, sequence, save_path)
+        # process_sequence(data_path, sequence, save_path)
 
