@@ -111,7 +111,7 @@ if __name__ == '__main__':
                     truncation_df, box_vertices_list = Label.postprocessing.TRUNCATION.truncation( df)
 
                     # 후처리 함수
-                    frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, filenum, log_start_time)
+                    frame_metadata = Label.postprocessing.BOX.change_frame_metadata(n, log_start_time)
                     object_list = Label.postprocessing.BOX.change_object_list(truncation_df)
                     frame = Label.postprocessing.BOX.frames(object_list, frame_metadata)
                     output_json['FRAME_LIST'].append(frame)
