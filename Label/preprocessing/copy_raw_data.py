@@ -38,9 +38,13 @@ def extract_files(source_folder, target_folder, target_file):
 
     for filename in os.listdir(source_folder):
         file_number = ''.join(filter(str.isdigit, filename))
+        if target_file:
+            if file_number.isdigit() and int(file_number) in target_file:
+                file_path = os.path.join(source_folder, filename)
 
-        if file_number.isdigit() and int(file_number) in target_file:
+                if os.path.isfile(file_path):
+                    shutil.copy(file_path, target_folder)
+        else:
             file_path = os.path.join(source_folder, filename)
-
-            if os.path.isfile(file_path):
+            if os.path.isfile(file_path) and int(file_number) % 25 == 0:
                 shutil.copy(file_path, target_folder)
