@@ -55,7 +55,7 @@ if __name__ == '__main__':
         # STEP 2. Extract raw pcdbin
         raw_pcd_folder = os.path.join(LDR_Raw_PCD, pcd_folder)
         pointclouds_folder = os.path.join(save_data_path, f"{sequence_set}/pointclouds")
-        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, sequence_set, pointclouds_folder, None)
+        Label.preprocessing.raw_pcd_processing(raw_pcd_folder, pointclouds_folder, None)
 
         # STEP 3. Extract raw image
         raw_image_set = f"LDR_Raw_Image-{sequence_set}"
